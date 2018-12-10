@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: BoxMaterial
+  m_Name: ConsoleButtons4
   m_Shader: {fileID: 4800000, guid: b62cb1097b473f546bb16cc1de0ca9c3, type: 3}
   m_ShaderKeywords: 
   m_LightmapFlags: 4
@@ -76,5 +76,5 @@ Material:
     - _UVSec: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0.3207547, g: 0.30713776, b: 0.30713776, a: 1}
+    - _Color: {r: 0, g: 1, b: 0.28763008, a: 1}
+    - _EmissionColor: {r: 0, g: 1, b: 0.18213654, a: 1}
