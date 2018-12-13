@@ -26,10 +26,20 @@ public class StorageBossCutsceneTrigger : MonoBehaviour
         {
             if (light.activeSelf==true)
             {
+                if (gameObject.GetComponent<AudioSource>()!=null)
+                {
+                    gameObject.GetComponent<AudioSource>().Stop();
+                }
+                
                 light.SetActive(false);
             }
             else
             {
+                if (gameObject.GetComponent<AudioSource>() != null)
+                {
+                    gameObject.GetComponent<AudioSource>().Play();
+                }
+
                 light.SetActive(true);
             }
         }
@@ -44,7 +54,7 @@ public class StorageBossCutsceneTrigger : MonoBehaviour
                 humanActor.GetComponent<HumanActor>().Trigger();
                 humanActor.GetComponent<HumanActor>().cutsceneControl = gameObject;
             }
-
+            
             Triggered = true;
         }
     }

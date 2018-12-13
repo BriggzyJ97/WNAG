@@ -16,6 +16,10 @@ public class HumanActor : MonoBehaviour
     private bool lightsToggled = false;
 
     private AudioSource audioSource;
+    private bool audioOn = false;
+
+    public CloseAndOpenDoorControl doorToClose;
+    public bossFightController bossToTurnOn;
 
 	// Use this for initialization
 	void Start ()
@@ -31,41 +35,48 @@ public class HumanActor : MonoBehaviour
 	        if (actorName == "storageBoss1")
 	        {
 	            actingTimer += Time.deltaTime;
-	            if (actingTimer == 0f) 
-	            {
-                    audioSource.Play();
-	            }
+	            
 	            if (actingTimer > 0f && actingTimer < 1f)
 	            {
-	                audioSource.Play();
-                    gameObject.transform.position =
-	                    Vector3.MoveTowards(gameObject.transform.position, thisActorsMarks[0].position, 10f*Time.deltaTime);
-
+	                if (audioOn==false)
+	                {
+                        audioSource.Play();
+	                    audioOn = true;
+	                }
+                    gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, thisActorsMarks[0].position, 10f*Time.deltaTime);
 	                lookingAtPlayer = true;
 	            }
 
-	            if (actingTimer ==1f)
+	            if (actingTimer >1f&&actingTimer<2.5f)
 	            {
-                    audioSource.Stop();
-
+	                if (audioOn==true)
+	                {
+                        audioSource.Stop();
+	                    audioOn = false;
+	                }
 	            }
-	            if (actingTimer == 2.5f)
-	            {
-	                audioSource.Play();
-
-	            }
+	            
                 if (actingTimer>2.5f &&actingTimer<3.5f)
 	            {
-	                lookingAtPlayer = false;
+	                if (audioOn == false)
+	                {
+	                    audioSource.Play();
+	                    audioOn = true;
+	                }
+                    lookingAtPlayer = false;
 	                gameObject.transform.position =
 	                    Vector3.MoveTowards(gameObject.transform.position, thisActorsMarks[1].position, 10f * Time.deltaTime);
 	                gameObject.transform.LookAt(thisActorsMarks[1]);
                 }
-	            if (actingTimer == 3.5f)
+	            if (actingTimer > 3.5f && actingTimer<4f)
 	            {
-	                audioSource.Stop();
+	                if (audioOn == true)
+	                {
+	                    audioSource.Stop();
+	                    audioOn = false;
+	                }
 
-	            }
+                }
 
                 if (actingTimer>4f&& actingTimer<4.25f)
 	            {
@@ -76,27 +87,35 @@ public class HumanActor : MonoBehaviour
 	                }
                     
 	            }
-
-	            if (actingTimer == 4.25f)
-	            {
-	                audioSource.Play();
-
-	            }
                 if (actingTimer>4.25f &&actingTimer<5f)
 	            {
-	                gameObject.transform.position =
+	                if (audioOn == false)
+	                {
+	                    audioSource.Play();
+	                    audioOn = true;
+	                }
+                    gameObject.transform.position =
 	                    Vector3.MoveTowards(gameObject.transform.position, thisActorsMarks[2].position, 10f * Time.deltaTime);
 	                gameObject.transform.LookAt(thisActorsMarks[2]);
 	                audioSource.volume -= 0.003f;
 	            }
 
-	            if (actingTimer > 5f && actingTimer < 8f)
+	            if (actingTimer > 5f && actingTimer < 7f)
 	            {
 	                audioSource.volume -= 0.003f;
                     gameObject.transform.position =
 	                    Vector3.MoveTowards(gameObject.transform.position, thisActorsMarks[3].position, 10f * Time.deltaTime);
 	                gameObject.transform.LookAt(thisActorsMarks[3]);
                 }
+	            if (actingTimer>7f)
+	            {
+	                if (audioOn == true)
+	                {
+	                    audioSource.Stop();
+	                    audioOn = false;
+	                }
+
+	            }
 
                 if (lookingAtPlayer==true)
 	            {
@@ -108,28 +127,116 @@ public class HumanActor : MonoBehaviour
 	            actingTimer += Time.deltaTime;
 	            if (actingTimer > 1f && actingTimer < 1.5f)
 	            {
-	                gameObject.transform.position =
+	                if (audioOn == false)
+	                {
+	                    audioSource.Play();
+	                    audioOn = true;
+	                }
+                    gameObject.transform.position =
 	                    Vector3.MoveTowards(gameObject.transform.position, thisActorsMarks[0].position, 10f*Time.deltaTime);
 	                lookingAtPlayer = true;
                 }
-	            if (actingTimer > 3f && actingTimer < 4f)
+	            if (actingTimer > 1.5f && actingTimer < 3f)
 	            {
-	                lookingAtPlayer = false;
+	                if (audioOn == true)
+	                {
+	                    audioSource.Stop();
+	                    audioOn = false;
+	                }
+	            }
+                if (actingTimer > 3f && actingTimer < 4f)
+	            {
+	                if (audioOn == false)
+	                {
+	                    audioSource.Play();
+	                    audioOn = true;
+	                }
+                    lookingAtPlayer = false;
 	                gameObject.transform.position =
 	                    Vector3.MoveTowards(gameObject.transform.position, thisActorsMarks[1].position, 15f * Time.deltaTime);
 	                gameObject.transform.LookAt(thisActorsMarks[1]);
                 }
 	            if (actingTimer > 4f && actingTimer < 5.5f)
 	            {
-	                
+	                audioSource.volume -= 0.003f;
 	                gameObject.transform.position =
 	                    Vector3.MoveTowards(gameObject.transform.position, thisActorsMarks[2].position, 15f * Time.deltaTime);
 	                gameObject.transform.LookAt(thisActorsMarks[2]);
                 }
+	            if (actingTimer>5.5f)
+	            {
+	                if (audioOn == true)
+	                {
+	                    audioSource.Stop();
+	                    audioOn = false;
+	                }
+
+	            }
                 if (lookingAtPlayer == true)
 	            {
 	                gameObject.transform.LookAt(player.transform.position);
 	            }
+            }else if (actorName == "storageBoss3")
+            {
+                actingTimer += Time.deltaTime;
+
+                if (actingTimer > 0f && actingTimer < 1f)
+                {
+                    if (audioOn == false)
+                    {
+                        audioSource.Play();
+                        audioOn = true;
+                    }
+                    gameObject.transform.position = Vector3.MoveTowards(gameObject.transform.position, thisActorsMarks[0].position, 15f * Time.deltaTime);
+                }
+
+                if (actingTimer > 1f && actingTimer < 1.5f)
+                {
+                    if (audioOn == true)
+                    {
+                        audioSource.Stop();
+                        audioOn = false;
+                    }
+                }
+
+                if (actingTimer > 1.5f && actingTimer < 1.75f)
+                {
+                    if (lightsToggled == false)
+                    {
+                        cutsceneControl.GetComponent<StorageBossCutsceneTrigger>().ToggleLights();
+                        doorToClose.CloseDoor();
+                        bossToTurnOn.TurnOnBoss();
+                        lightsToggled = true;
+                    }
+                }
+                if (actingTimer > 1.75f && actingTimer < 3.5f)
+                {
+                    if (audioOn == false)
+                    {
+                        audioSource.Play();
+                        audioOn = true;
+                    }
+                    gameObject.transform.position =
+                        Vector3.MoveTowards(gameObject.transform.position, thisActorsMarks[1].position, 10f * Time.deltaTime);
+                    gameObject.transform.LookAt(thisActorsMarks[1]);
+                    audioSource.volume -= 0.003f;
+
+                }
+                
+                if (actingTimer > 3.5f)
+                {
+                    if (audioOn == true)
+                    {
+                        audioSource.Stop();
+                        audioOn = false;
+                    }
+
+                }
+
+                if (lookingAtPlayer == true)
+                {
+                    gameObject.transform.LookAt(player.transform.position);
+                }
             }
         }
 	    
