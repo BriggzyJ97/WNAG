@@ -17,6 +17,9 @@ TagManager:
   - DiagonalRightMirror
   - DiagonalLeftMirror
   - Box
+  - WalkingEnemy
+  - BossFightController
+  - EnemyMirror
   layers:
   - Default
   - TransparentFX

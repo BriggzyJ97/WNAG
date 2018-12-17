@@ -201,6 +201,11 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
             Destroy(other.gameObject);
             Destroy(this.gameObject);
 
+        }else if (other.gameObject.tag == "WalkingEnemy")
+        {
+            Instantiate(sparks, transform.position, Quaternion.identity);
+            other.gameObject.GetComponent<enemyController>().Die();
+            Destroy(this.gameObject);
         }
     }
 
