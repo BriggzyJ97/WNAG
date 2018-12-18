@@ -13,10 +13,11 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
     public Vector3 directionOfBullet; //The direction that the bullet is moving
 
     private bool positionUpdateBool = false; //Bool used for updating "lastPosition" variable
-    private bool isReflected = false;// Bool that keeps track of whether the bullet has been reflected
-    public bool readyForReflected = true; //Makes sure that bullet doesnt keep reflecting infinitely when hitting mirror
+    public bool isReflected = false;// Bool that keeps track of whether the bullet has been reflected
+    public bool readyForReflected = true; //Makes sure that bullet doesnt keep reflecting infinitely when hitting mirro
+    private float positionUpdateDelay = 0.5f;
 
-    private AudioSource bulletHitSound;
+    public AudioSource bulletHitSound;
 
     private float CollisionDelay = 0.2f;
     
@@ -51,12 +52,7 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
             //moves bullet along new reflected direction
             transform.Translate(directionOfBullet*bulletSpeed*Time.deltaTime, Space.World);
 	    }
-	    if (positionUpdateBool == false)
-	    {
-            //Calculate direction of bullet
-	        directionOfBullet = UpdateDirection();
-	        positionUpdateBool = true;
-	    }
+	    
 
 	    if (readyForReflected==false)
 	    {
@@ -68,11 +64,27 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
 	    if (directionOfBullet == new Vector3(0,0,0))
 	    {
             //a failsafe that makes sure that if the bullet stops moving for whatever reason it deletes itself
-            Destroy(this.gameObject);
+            //Destroy(this.gameObject);
 	    }
 
 
 
+    }
+
+    void FixedUpdate()
+    {
+        if (positionUpdateBool == false)
+        {
+            //Calculate direction of bullet
+            positionUpdateDelay -= Time.deltaTime;
+            if (positionUpdateDelay<=0)
+            {
+                directionOfBullet = UpdateDirection();
+                Debug.Log(directionOfBullet);
+                positionUpdateBool = true;
+            }
+            
+        }
     }
 
     void OnTriggerEnter(Collider other)

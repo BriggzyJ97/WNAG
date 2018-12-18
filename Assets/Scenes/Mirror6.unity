@@ -5862,7 +5862,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 1142703849865772, guid: 0918d07f4b76094498121312b85b4ec7, type: 2}
       propertyPath: m_TagString
-      value: DiagonalLeftMirror
+      value: Mirror
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0918d07f4b76094498121312b85b4ec7, type: 2}
