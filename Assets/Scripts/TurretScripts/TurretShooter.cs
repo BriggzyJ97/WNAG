@@ -102,7 +102,7 @@ public class TurretShooter : MonoBehaviour //Controls the turret shooting
 
         }
 
-        if(isTargettingLaserOn==true)
+        if(isTargettingLaserOn==true&&transform.parent.parent.GetComponent<TurretTurner>().enabled==true)
         {
             if (hasLineRendererBeenSpawned==false)
             {

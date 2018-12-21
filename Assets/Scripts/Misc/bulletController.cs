@@ -80,7 +80,7 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
             if (positionUpdateDelay<=0)
             {
                 directionOfBullet = UpdateDirection();
-                Debug.Log(directionOfBullet);
+                //Debug.Log(directionOfBullet);
                 positionUpdateBool = true;
             }
             
@@ -115,7 +115,7 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
         {
             if (readyForReflected==true)
             {
-                bulletHitSound.Play();
+                //bulletHitSound.Play();
                 other.gameObject.GetComponent<AudioSource>().Play();
                 isReflected = true;
                 directionOfBullet = (Vector3.Reflect(directionOfBullet, Vector3.right)).normalized;
@@ -130,7 +130,7 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
         {
             if (readyForReflected == true)
             {
-                bulletHitSound.Play();
+                //bulletHitSound.Play();
                 other.gameObject.GetComponent<AudioSource>().Play();
                 isReflected = true;
                 float tempDirectionXValue = directionOfBullet.z;
@@ -148,7 +148,7 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
         {
             if (readyForReflected == true)
             {
-                bulletHitSound.Play();
+                //bulletHitSound.Play();
                 other.gameObject.GetComponent<AudioSource>().Play();
                 isReflected = true;
                 float tempDirectionXValue = -directionOfBullet.z;
@@ -165,7 +165,7 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
         {
             if (readyForReflected == true)
             {
-                bulletHitSound.Play();
+                //bulletHitSound.Play();
                 other.gameObject.GetComponent<AudioSource>().Play();
                 isReflected = true;
                 directionOfBullet = (Vector3.Reflect(directionOfBullet, Vector3.forward)).normalized;
@@ -215,9 +215,13 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
 
         }else if (other.gameObject.tag == "WalkingEnemy")
         {
-            Instantiate(sparks, transform.position, Quaternion.identity);
-            other.gameObject.GetComponent<enemyController>().Die();
-            Destroy(this.gameObject);
+            if (other.gameObject.GetComponent<enemyController>().isAlive==true)
+            {
+                Instantiate(sparks, transform.position, Quaternion.identity);
+                other.gameObject.GetComponent<enemyController>().Die();
+                Destroy(this.gameObject);
+            }
+            
         }
     }
 

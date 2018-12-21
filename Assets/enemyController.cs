@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class enemyController : MonoBehaviour
 {
+    public bool isAlive = true;
+
 
     private NavMeshAgent myNavMesh;
     private GameObject player;
@@ -48,9 +50,11 @@ public class enemyController : MonoBehaviour
 
     public void Die()
     {
+        isAlive = false;
         Instantiate(deathExplosion, transform.position, Quaternion.identity);
         //gameObject.GetComponent<AudioSource>().Play();
         bossFightController.enemiesAlive -= 1;
+        Debug.Log("enemy killed");
         Destroy(this.gameObject);
     }
 }

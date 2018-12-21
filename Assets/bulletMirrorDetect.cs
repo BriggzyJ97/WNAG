@@ -13,15 +13,15 @@ public class bulletMirrorDetect : MonoBehaviour
         if (other.gameObject.tag=="Mirror")
         {
             ContactPoint contact = other.contacts[0];
-            Debug.Log("Before: "+bulletMain.directionOfBullet);
+            //Debug.Log("Before: "+bulletMain.directionOfBullet);
             bulletMain.directionOfBullet = Vector3.Reflect(bulletMain.directionOfBullet, contact.normal).normalized;
             
             bulletMain.transform.LookAt(bulletMain.transform.position + bulletMain.directionOfBullet);
-            Debug.Log("After: " + bulletMain.directionOfBullet);
+            //Debug.Log("After: " + bulletMain.directionOfBullet);
             bulletMain.isReflected = true;
             bulletMain.transform.Rotate(0, 90, 0);
             bulletMain.readyForReflected = false;
-            bulletMain.bulletHitSound.Play();
+            //bulletMain.bulletHitSound.Play();
             other.gameObject.GetComponent<AudioSource>().Play();
         }
     }
