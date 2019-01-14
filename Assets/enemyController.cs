@@ -5,6 +5,8 @@ using UnityEngine.AI;
 
 public class enemyController : MonoBehaviour
 {
+
+
     public bool isAlive = true;
 
 
