@@ -36,45 +36,69 @@ EditorBuildSettings:
     path: Assets/Scenes/Standard 6.unity
     guid: 6004be3750e709d4f892a7efee66f0ef
   - enabled: 1
-    path: Assets/Scenes/Standard 7.unity
-    guid: a6301b98ed78fa149b5baf784f326dc6
-  - enabled: 1
-    path: Assets/Scenes/Doubles 1.unity
-    guid: c1d67c51f7e5ce74a94fffa2efd398a2
-  - enabled: 1
-    path: Assets/Scenes/Doubles 2.unity
-    guid: 3b0e7a6b4765b6241a85711fda232dc0
-  - enabled: 1
     path: Assets/Scenes/Dialogue 1.unity
     guid: 427fd0d45fb04934abd28b8a7cd7eef4
   - enabled: 1
-    path: Assets/Scenes/AutoFire 1.unity
-    guid: 54ebd2f9ef2b242429e7a1f66edd19e4
+    path: Assets/Scenes/Rails 1.unity
+    guid: aa145d41746e384418ca7fb35db71088
   - enabled: 1
-    path: Assets/Scenes/AutoFire 2.unity
-    guid: 307cc14714bd5344d9ee0e6a01f45a17
+    path: Assets/Scenes/Rails 2.unity
+    guid: 96f2bba0af1bb5148881ea13493f5872
   - enabled: 1
-    path: Assets/Scenes/Doubles 3.unity
-    guid: 578327aadb905ac498e5cf94df124a05
-  - enabled: 1
-    path: Assets/Scenes/WallTurret1.unity
-    guid: c5bb0a6711a35f04283ddc098d41b7e4
-  - enabled: 1
-    path: Assets/Scenes/WallTurret2.unity
-    guid: 474a8167bc536634bb3de70ad76ee61e
+    path: Assets/Scenes/Rails 3.unity
+    guid: 29be615856a4e6d408a8a517bf726730
   - enabled: 1
     path: Assets/Scenes/Mirror5.unity
     guid: 01295dab9d207d1479a9eb2a25c17543
   - enabled: 1
+    path: Assets/Scenes/Standard 7.unity
+    guid: a6301b98ed78fa149b5baf784f326dc6
+  - enabled: 1
+    path: Assets/Scenes/RailsAndMirrors1.unity
+    guid: f5f543e99d032d24bbe18ba2f0768cd1
+  - enabled: 1
+    path: Assets/Scenes/RailsAndMirrors2.unity
+    guid: c040ae0ee5a96a6439fafb017f4939de
+  - enabled: 1
+    path: Assets/Scenes/RailsAndMirrors3.unity
+    guid: 84eecdd5041bb454c90b0d7da9ca4237
+  - enabled: 1
+    path: Assets/Scenes/StorageBoss.unity
+    guid: c486c0280092c3242b913c47c9af1972
+  - enabled: 0
+    path: Assets/Scenes/Doubles 1.unity
+    guid: c1d67c51f7e5ce74a94fffa2efd398a2
+  - enabled: 0
+    path: Assets/Scenes/Doubles 2.unity
+    guid: 3b0e7a6b4765b6241a85711fda232dc0
+  - enabled: 0
+    path: Assets/Scenes/AutoFire 1.unity
+    guid: 54ebd2f9ef2b242429e7a1f66edd19e4
+  - enabled: 0
+    path: Assets/Scenes/AutoFire 2.unity
+    guid: 307cc14714bd5344d9ee0e6a01f45a17
+  - enabled: 0
+    path: Assets/Scenes/Doubles 3.unity
+    guid: 578327aadb905ac498e5cf94df124a05
+  - enabled: 0
+    path: Assets/Scenes/WallTurret1.unity
+    guid: c5bb0a6711a35f04283ddc098d41b7e4
+  - enabled: 0
+    path: Assets/Scenes/WallTurret2.unity
+    guid: 474a8167bc536634bb3de70ad76ee61e
+  - enabled: 0
     path: Assets/Scenes/Mirror6.unity
     guid: 7b697df5be1cea64588fe01ce529f641
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/WallAndMirror1.unity
     guid: 8e4a0f009a3ab94468ff1530d1f1e1b8
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/AutoFire 3.unity
     guid: debb5181076c41e43873acc7bd2877f6
   - enabled: 1
     path: Assets/Scenes/IntroLevel.unity
     guid: 81371338b6de7da429c4551bd7916ce5
+  - enabled: 0
+    path: Assets/Scenes/BoxRoom.unity
+    guid: fbe9f5fa4246c8e4da8edd14bf5b00b3
   m_configObjects: {}

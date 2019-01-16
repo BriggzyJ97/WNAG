@@ -2456,12 +2456,12 @@ Prefab:
     - target: {fileID: 114514075628447952, guid: bacab3b1e4edddf49b2b2bdc8b97b344,
         type: 2}
       propertyPath: turretDownTimerMax
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114514075628447952, guid: bacab3b1e4edddf49b2b2bdc8b97b344,
         type: 2}
       propertyPath: turretDownTimer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bacab3b1e4edddf49b2b2bdc8b97b344, type: 2}
@@ -3068,12 +3068,12 @@ Prefab:
     - target: {fileID: 114514075628447952, guid: bacab3b1e4edddf49b2b2bdc8b97b344,
         type: 2}
       propertyPath: turretDownTimerMax
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114514075628447952, guid: bacab3b1e4edddf49b2b2bdc8b97b344,
         type: 2}
       propertyPath: turretDownTimer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bacab3b1e4edddf49b2b2bdc8b97b344, type: 2}
@@ -4425,12 +4425,12 @@ Prefab:
     - target: {fileID: 114514075628447952, guid: bacab3b1e4edddf49b2b2bdc8b97b344,
         type: 2}
       propertyPath: turretDownTimerMax
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114514075628447952, guid: bacab3b1e4edddf49b2b2bdc8b97b344,
         type: 2}
       propertyPath: turretDownTimer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bacab3b1e4edddf49b2b2bdc8b97b344, type: 2}
@@ -8895,12 +8895,12 @@ Prefab:
     - target: {fileID: 114514075628447952, guid: bacab3b1e4edddf49b2b2bdc8b97b344,
         type: 2}
       propertyPath: turretDownTimerMax
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 114514075628447952, guid: bacab3b1e4edddf49b2b2bdc8b97b344,
         type: 2}
       propertyPath: turretDownTimer
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bacab3b1e4edddf49b2b2bdc8b97b344, type: 2}

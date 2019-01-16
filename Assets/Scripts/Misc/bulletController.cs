@@ -15,7 +15,7 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
     private bool positionUpdateBool = false; //Bool used for updating "lastPosition" variable
     public bool isReflected = false;// Bool that keeps track of whether the bullet has been reflected
     public bool readyForReflected = true; //Makes sure that bullet doesnt keep reflecting infinitely when hitting mirro
-    private float positionUpdateDelay = 0.5f;
+    private float positionUpdateDelay = 0.1f;
 
     public AudioSource bulletHitSound;
 
