@@ -125,7 +125,7 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
 	        }
 	    }
         
-	    if (currentGameState==GameState.levelWin) //When the player wins 
+	    if (currentGameState==GameState.levelWin&&SceneManager.GetActiveScene().name!="StorageBoss") //When the player wins 
 	    {
             //set all player doubles to disable
             if(TurretTurner.playerList!=null)

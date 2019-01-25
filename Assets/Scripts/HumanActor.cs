@@ -19,7 +19,7 @@ public class HumanActor : MonoBehaviour
     private bool audioOn = false;
 
     public CloseAndOpenDoorControl doorToClose;
-    public bossFightController bossToTurnOn;
+    public newStorageBoss bossToTurnOn;
 
 	// Use this for initialization
 	void Start ()

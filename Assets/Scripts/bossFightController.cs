@@ -17,7 +17,7 @@ public class bossFightController : MonoBehaviour {
 
     public BossStates currentBossState = BossStates.off;
 
-    private int subPhases = 4;
+    private int subPhases = 0;
     private float tempTimer = 0;
     private float alpha = 0;
     public int enemiesAlive = 0;
