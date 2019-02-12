@@ -20,6 +20,9 @@ TagManager:
   - WalkingEnemy
   - BossFightController
   - EnemyMirror
+  - BossWeakSpot
+  - BossBack
+  - ForceField
   layers:
   - Default
   - TransparentFX

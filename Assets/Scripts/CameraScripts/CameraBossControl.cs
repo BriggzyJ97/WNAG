@@ -17,11 +17,20 @@ public class CameraBossControl : MonoBehaviour {
     public GameObject finalSpot;
 
     public float startTime;
-    private float duration = 20f;
+    public float duration = 20f;
+
+    public float ScreenShakeAmount = 0;
 
 	// Update is called once per frame
 	void Update () {
-	    if (currentCameraStates == CameraStates.follow)
+
+	    transform.localPosition = transform.localPosition + Random.insideUnitSphere * ScreenShakeAmount;
+	    if (ScreenShakeAmount<0)
+	    {
+	        ScreenShakeAmount = 0;
+	    }
+
+        if (currentCameraStates == CameraStates.follow)
 	    {
 
 	    }
@@ -38,8 +47,13 @@ public class CameraBossControl : MonoBehaviour {
 	            currentCameraStates = CameraStates.idle;
 	        }
 	    }else if (currentCameraStates == CameraStates.idle)
-	    {
-
-	    }
+        {
+            if (ScreenShakeAmount==0&&Vector3.Distance(transform.position, finalSpot.transform.position)>0.5f)
+            {
+                float t = (Time.time - startTime) / duration;
+                transform.position = new Vector3(Mathf.SmoothStep(transform.position.x, finalSpot.transform.position.x, t), Mathf.SmoothStep(transform.position.y, finalSpot.transform.position.y, t), Mathf.SmoothStep(transform.position.z, finalSpot.transform.position.z, t));
+            }
+            
+        }
 	}
 }

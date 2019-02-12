@@ -16,6 +16,7 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
     public bool isReflected = false;// Bool that keeps track of whether the bullet has been reflected
     public bool readyForReflected = true; //Makes sure that bullet doesnt keep reflecting infinitely when hitting mirro
     private float positionUpdateDelay = 0.1f;
+    public GameObject thisBulletsTurretForceField;
 
     public AudioSource bulletHitSound;
 
@@ -61,10 +62,10 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
 	        readyForReflected = true;
 	    }
 
-	    if (directionOfBullet == new Vector3(0,0,0))
+	    if (directionOfBullet == new Vector3(0,0,0)&&CollisionDelay>0.5f)
 	    {
             //a failsafe that makes sure that if the bullet stops moving for whatever reason it deletes itself
-            //Destroy(this.gameObject);
+            Destroy(this.gameObject);
 	    }
 
 
@@ -222,6 +223,17 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
                 Destroy(this.gameObject);
             }
             
+        }else if (other.gameObject.tag=="BossWeakSpot")
+        {
+            Instantiate(sparks, transform.position, Quaternion.identity);
+            other.gameObject.GetComponent<bossHealthController>().LowerHealth();
+            Destroy(this.gameObject);
+        }else if (other.gameObject.tag=="ForceField" && other.gameObject != thisBulletsTurretForceField)
+        {
+            Debug.Log("bulletHittingForceField");
+            bulletHitSound.Play();
+            Instantiate(sparks, transform.position, Quaternion.identity);
+            Destroy(this.gameObject);
         }
     }
 

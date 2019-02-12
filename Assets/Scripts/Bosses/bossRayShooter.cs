@@ -6,7 +6,15 @@ public class bossRayShooter : MonoBehaviour
 {
 
     private bool hitPlayer = false;
+    private bool hitTurret = false;
+    
     public int playerHitCounter = 0;
+    public int turretHitCounter = 0;
+
+    public GameObject lastTurretHit;
+
+    public bool hitBack = false;
+
     
    
 	
@@ -20,6 +28,14 @@ public class bossRayShooter : MonoBehaviour
                 playerHitCounter += 1;
                 hitPlayer = true;
             }
+        }else if (other.tag =="BossBack")
+        {
+            hitBack = true;
+        }else if (other.tag=="Turret")
+        {
+            turretHitCounter += 1;
+            lastTurretHit = other.gameObject;
+            hitTurret = true;
         }
     }
 
@@ -28,6 +44,11 @@ public class bossRayShooter : MonoBehaviour
         if (other.tag == "Player")
         {
             hitPlayer = false;
+        }else if (other.tag =="Turret")
+        {
+            hitTurret = false;
         }
+       
     }
+
 }

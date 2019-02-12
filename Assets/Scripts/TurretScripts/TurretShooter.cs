@@ -20,6 +20,7 @@ public class TurretShooter : MonoBehaviour //Controls the turret shooting
 
     public GameObject baseBox;// the big square box part of the turret
     private Material baseMat;// the material of the base of turret
+    public GameObject thisTurretsForceField;
 
     public bool isAutoShooter = false; //if this turret is a purple auto shooter one
     private Color purpleBaseColor = new Color(0.7f,0,0.7f,1); // the purple base colour for dynamic tweaking
@@ -27,7 +28,7 @@ public class TurretShooter : MonoBehaviour //Controls the turret shooting
 
     public bool isTargettingLaserOn = false;
     public GameObject lineRenderer;
-    private LineRenderer tempLineRenderer;
+    public LineRenderer tempLineRenderer;
     private bool hasLineRendererBeenSpawned = false;
     public LayerMask targetLineLayerMask;
     
@@ -87,7 +88,12 @@ public class TurretShooter : MonoBehaviour //Controls the turret shooting
 	            if (shootingCooldown >= shootingCooldownMax)
 	            {
 	                shootingSound.Play();
-                    Instantiate(bullet, transform.position, transform.rotation);
+                    GameObject tempBullet = Instantiate(bullet, transform.position, transform.rotation);
+	                if (thisTurretsForceField !=null)
+	                {
+	                    tempBullet.GetComponent<bulletController>().thisBulletsTurretForceField = thisTurretsForceField;
+
+	                }
 	                Instantiate(sparks, sparksEmitter.transform.position, sparksEmitter.transform.rotation);
                     shootingCooldown = 0;
 	            }
@@ -116,7 +122,7 @@ public class TurretShooter : MonoBehaviour //Controls the turret shooting
 	            tempLineRenderer.gameObject.transform.position =
 	                sparksEmitter.transform.position - ((sparksEmitter.transform.position - hit.point) / 2);
                 tempLineRenderer.SetPosition(0,new Vector3(sparksEmitter.transform.position.x, sparksEmitter.transform.position.y, sparksEmitter.transform.position.z));
-                tempLineRenderer.SetPosition(1,new Vector3(hit.point.x, hit.point.y, hit.point.z));
+                tempLineRenderer.SetPosition(1,hit.point);
                 //Debug.Log("Did Hit");
             }
 	        else
