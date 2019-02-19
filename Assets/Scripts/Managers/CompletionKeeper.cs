@@ -3,9 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.PostProcessing;
 
-public class CompletionKeeper : MonoBehaviour //This singleton keeps track of how many levels have been completed by the player and saves that in player prefs.
+public class CompletionKeeper : MonoBehaviour 
+    
+//This singleton keeps track of how many levels have been completed by the player and saves that in player prefs.
 //also keeps track of settings
 {
+
+    #region Variables
     public int howManyLevelsCompleted = 1;
     private static bool keeperExists = false;
 
@@ -31,8 +35,11 @@ public class CompletionKeeper : MonoBehaviour //This singleton keeps track of ho
 
     public string playername;
 
+    #endregion
+
+    // TO make sure there is only one of this script and that it carries on through scene changes.
     void Awake()
-    {// TO make sure there is only one of this script and that it carries on through scene changes.
+    {
         if (keeperExists==false)
         {
             DontDestroyOnLoad(this.gameObject);
@@ -45,9 +52,8 @@ public class CompletionKeeper : MonoBehaviour //This singleton keeps track of ho
         }
     }
 
-	// Use this for initialization
-	void Start () {
-        //Restores variable data from player preferences 
+    //Restores variable data from player preferences 
+    void Start () {
 		RestoreDataFromPlayerPrefBackup();
         RestorePlayerName();
 	    if (mutedMusic==true)
@@ -56,6 +62,7 @@ public class CompletionKeeper : MonoBehaviour //This singleton keeps track of ho
 	    }
 	}
 
+    
     public void BackupDataToPlayerPrefs()
     {
         //Saves data to player prefs
@@ -80,9 +87,10 @@ public class CompletionKeeper : MonoBehaviour //This singleton keeps track of ho
         
     }
 
+    //Gets data from player prefs
     public void RestoreDataFromPlayerPrefBackup()
     {
-        //Gets data from player prefs
+        
         howManyLevelsCompleted=PlayerPrefs.GetInt("levelsCompleted");
         if (PlayerPrefs.GetInt("musicMuted")==1)
         {
@@ -103,11 +111,13 @@ public class CompletionKeeper : MonoBehaviour //This singleton keeps track of ho
         }
     }
 
+    //update the players inputted name when they input it
     public void UpdatePlayerName()
     {
         PlayerPrefs.SetString("playerName", playername);
     }
 
+    //restore players inputed name from player prefs
     public void RestorePlayerName()
     {
         playername = PlayerPrefs.GetString("playerName");

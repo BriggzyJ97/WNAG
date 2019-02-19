@@ -9,7 +9,7 @@ using UnityEngine.PostProcessing;
 
 public class mainMenuController : MonoBehaviour//this script controls the main menu
 {
-    //Button Variables
+    #region Variables
     [Header("Button Variables")] // these are all variables for the buttons 
     private bool pageMoving = false; // level select screen moving
     private string directionOfPageMove = ""; 
@@ -71,12 +71,13 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
     private bool continuingToNextLevel = false; //for loading levels 
     private bool loadingLevel = false;
     private int whichLevelToLoad;
-    
 
-	// Use this for initialization
-	void Start ()
+    #endregion
+
+    //assign dynamic variables and setting post processing settings
+    void Start ()
 	{
-        //assign dynamic variables and setting post processing settings
+        
 	    buttonNoise = gameObject.GetComponent<AudioSource>();
 	    completionKeeper = GameObject.FindGameObjectWithTag("CompletionKeeper").GetComponent<CompletionKeeper>();
 	    PPSetting = PlayerPrefs.GetString("PPSetting", "max");
@@ -103,11 +104,13 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
 	    {
             unlockAllLevels();
 	    }
-	    if (continuingToNextLevel!=true&&loadingLevel!=true)// if the game isnt loading into another scene
+	    // if the game isnt loading into another scene
+        if (continuingToNextLevel!=true&&loadingLevel!=true)
 	    {
             if (currentMainMenuState == mainMenuState.opening) 
             {
-                if (completionKeeper.howManyLevelsCompleted == 0)//if the player hasnt completed any levels, change the top left button from continue to start
+                //if the player hasnt completed any levels, change the top left button from continue to start
+                if (completionKeeper.howManyLevelsCompleted == 0)
                 {
                     startOrContinueText.GetComponent<TextMeshProUGUI>().text = "Start";
                 }
@@ -116,19 +119,24 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
             {
 
             }
-            else if (currentMainMenuState == mainMenuState.levelSelect)// level select screen
+            // level select screen
+            else if (currentMainMenuState == mainMenuState.levelSelect)
             {
-                Debug.Log(ButtonHolder.GetComponent<RectTransform>().transform.localPosition.y);
-                if (pageMoving == true)//moving the level buttons
+                
+                //moving the level buttons
+                if (pageMoving == true)
                 {
-
-                    if (directionOfPageMove == "up")//moving up 
+                    //moving up
+                    if (directionOfPageMove == "up") 
                     {
-                        if (currentPageChangeState == pageChangeState.idle)// move page change onto the first moving state
+                        // move page change onto the first moving state
+                        if (currentPageChangeState == pageChangeState.idle)
                         {
                             currentPageChangeState = pageChangeState.bounceForward;
                         }
-                        else if (currentPageChangeState == pageChangeState.bounceForward)//move the page down slightly before moving up to give it a little bounce
+
+                        //move the page down slightly before moving up to give it a little bounce
+                        else if (currentPageChangeState == pageChangeState.bounceForward)
                         {
                             ButtonHolder.GetComponent<RectTransform>().Translate(0, pageMoveSpeed * Time.deltaTime, 0);
                             if (ButtonHolder.GetComponent<RectTransform>().transform.localPosition.y > targetPagePosition.y)
@@ -137,7 +145,9 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
                                 currentPageChangeState = pageChangeState.move;
                             }
                         }
-                        else if (currentPageChangeState == pageChangeState.move)//move the page up
+
+                        //move the page up
+                        else if (currentPageChangeState == pageChangeState.move)
                         {
                             cameraHolder.transform.Translate(0, cameraMoveSpeed * Time.deltaTime, 0);
                             ButtonHolder.GetComponent<RectTransform>().Translate(0, -pageMoveSpeed * Time.deltaTime, 0);
@@ -147,7 +157,9 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
                                 currentPageChangeState = pageChangeState.bounceBack;
                             }
                         }
-                        else if (currentPageChangeState == pageChangeState.bounceBack)//move it down a bit after moving to give more bounce
+
+                        //move it down a bit after moving to give more bounce
+                        else if (currentPageChangeState == pageChangeState.bounceBack)
                         {
                             ButtonHolder.GetComponent<RectTransform>().Translate(0, pageMoveSpeed * Time.deltaTime, 0);
                             if (ButtonHolder.GetComponent<RectTransform>().transform.localPosition.y > targetPagePosition.y)
@@ -160,7 +172,8 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
                                 downButton.GetComponent<Button>().interactable = true;
                                 downButton.GetComponent<Image>().enabled = true;
                                 downButton2.GetComponent<Image>().enabled = true;
-                                if (currentPage < 4)//make sure the player cant move up further then there is pages
+                                //make sure the player cant move up further then there is pages
+                                if (currentPage < 4)
                                 {
                                     upButton.GetComponent<Button>().interactable = true;
                                     upButton.GetComponent<Image>().enabled = true;
@@ -170,13 +183,18 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
                             }
                         }
                     }
-                    else if (directionOfPageMove == "down")//moving down
+
+                    //moving down
+                    else if (directionOfPageMove == "down")
                     {
-                        if (currentPageChangeState == pageChangeState.idle)// move page change onto the first moving state
+                        // move page change onto the first moving state
+                        if (currentPageChangeState == pageChangeState.idle)
                         {
                             currentPageChangeState = pageChangeState.bounceForward;
                         }
-                        else if (currentPageChangeState == pageChangeState.bounceForward)//move the page up slightly before moving down to give it a little bounce
+
+                        //move the page up slightly before moving down to give it a little bounce
+                        else if (currentPageChangeState == pageChangeState.bounceForward)
                         {
                             ButtonHolder.GetComponent<RectTransform>().Translate(0, -pageMoveSpeed * Time.deltaTime, 0);
                             if (ButtonHolder.GetComponent<RectTransform>().transform.localPosition.y < targetPagePosition.y)
@@ -185,7 +203,9 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
                                 currentPageChangeState = pageChangeState.move;
                             }
                         }
-                        else if (currentPageChangeState == pageChangeState.move)//move down
+
+                        //move down
+                        else if (currentPageChangeState == pageChangeState.move)
                         {
                             cameraHolder.transform.Translate(0, -cameraMoveSpeed * Time.deltaTime, 0);
                             ButtonHolder.GetComponent<RectTransform>().Translate(0, pageMoveSpeed * Time.deltaTime, 0);
@@ -195,7 +215,9 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
                                 currentPageChangeState = pageChangeState.bounceBack;
                             }
                         }
-                        else if (currentPageChangeState == pageChangeState.bounceBack)//move the page up slightly after moving down to give it a little bounce
+
+                        //move the page up slightly after moving down to give it a little bounce
+                        else if (currentPageChangeState == pageChangeState.bounceBack)
                         {
                             ButtonHolder.GetComponent<RectTransform>().Translate(0, -pageMoveSpeed * Time.deltaTime, 0);
                             if (ButtonHolder.GetComponent<RectTransform>().transform.localPosition.y < targetPagePosition.y)
@@ -207,7 +229,8 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
                                 upButton.GetComponent<Button>().interactable = true;
                                 upButton.GetComponent<Image>().enabled = true;
                                 upButton2.GetComponent<Image>().enabled = true;
-                                if (currentPage > 1)//make sure the player can't move down if they on bottom page
+                                //make sure the player can't move down if they on bottom page
+                                if (currentPage > 1)
                                 {
                                     downButton.GetComponent<Button>().interactable = true;
                                     downButton.GetComponent<Image>().enabled = true;
@@ -225,7 +248,8 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
             }
         }
 
-	    if (loadingLevel==true)//if level is loading trigger noise and then load whichever level button was clicked
+	    //if level is loading trigger noise and then load whichever level button was clicked
+        if (loadingLevel==true)
 	    {
 	        if (noiseObject.activeSelf == false)
 	        {
@@ -263,7 +287,8 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
 	        }
         }
 
-	    if (continuingToNextLevel == true) //trigger noise, then load the level that the player has gotten up to    
+        //if player presses continue button, trigger noise, then load the level that the player has gotten up to    
+	    if (continuingToNextLevel == true) 
 	    {
 	        if (noiseObject.activeSelf == false)
 	        {
@@ -309,7 +334,8 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
 	    
 	}
 
-    public void LoadLevel(int levelToLoad) //load level from level select buttons
+    //load level from level select buttons
+    public void LoadLevel(int levelToLoad) 
     {
         loadingLevel = true;
         dingSound.Play();
@@ -320,7 +346,8 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
         }
     }
 
-    public void MoveUpPage() //move the level select page up
+    //move the level select page up
+    public void MoveUpPage() 
     {
         if (pageMoving==false)
         {
@@ -338,7 +365,8 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
         
     }
 
-    public void MoveDownPage() //move the level select page down
+    //move the level select page down
+    public void MoveDownPage() 
     {
         if (pageMoving == false)
         {
@@ -356,7 +384,8 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
         }
     }
 
-    public void changeToLevelSelect() // open level select menu
+    // open level select menu
+    public void changeToLevelSelect() 
     {
         completionKeeper.RestoreDataFromPlayerPrefBackup();
         mainMenuObjects.SetActive(false);
@@ -370,6 +399,7 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
         currentMainMenuState = mainMenuState.levelSelect;
     }
 
+    //open different department menus in level select
     public void openStorageLevels()
     {
         storageLevelsObjects.SetActive(true);
@@ -401,13 +431,15 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
         levelSelectOptions.SetActive(false);
     }
 
+    //go back to department select
     public void BackToAreaSelect()
     {
         storageLevelsObjects.SetActive(false);
         levelSelectOptions.SetActive(true);
     }
 
-    public void backToMainMenu() //go back to main menu from other menus
+    //go back to main menu from other menus
+    public void backToMainMenu() 
     {
         mainMenuObjects.SetActive(true);
         if (completionKeeper.howManyLevelsCompleted == 0)
@@ -421,7 +453,8 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
         currentMainMenuState = mainMenuState.main;
     }
 
-    public void continueToNextLevel() //load the next level that the player should play
+    //load the next level that the player should play
+    public void continueToNextLevel() 
     {
         dingSound.Play();
         continuingToNextLevel = true;
@@ -431,40 +464,46 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
         }
     }
 
-    public void quit() //quit the game
+    //quit the game
+    public void quit() 
     {
         PlayerPrefs.SetInt("levelsCompleted",completionKeeper.howManyLevelsCompleted);
         Application.Quit();
     }
 
-    public void optionsOpen() //open the options menu
+    //open the options menu
+    public void optionsOpen() 
     {
         mainMenuObjects.SetActive(false);
         optionsObjects.SetActive(true);
         currentMainMenuState = mainMenuState.options;
     }
 
-    public void deleteData() //delete all saved data
+    //delete all saved data
+    public void deleteData() 
     {
         PlayerPrefs.SetInt("levelsCompleted",0);
         PlayerPrefs.SetString("playerName","");
         completionKeeper.howManyLevelsCompleted = 0;
     }
 
-    public void unlockAllLevels() // unlock all levels for player
+    // unlock all levels for player
+    public void unlockAllLevels() 
     {
         PlayerPrefs.SetInt("levelsCompleted", 60);
         completionKeeper.howManyLevelsCompleted = 60;
         
     }
 
-    public void openCredits() // open the credits page
+    // open the credits page
+    public void openCredits() 
     {
         optionsObjects.SetActive(false);
         creditsObjects.SetActive(true);
     }
 
-    public void backToOptions() //go back to the options menu from the credits menu
+    //go back to the options menu from the credits menu
+    public void backToOptions() 
     {
         optionsObjects.SetActive(true);
         creditsObjects.SetActive(false);
@@ -493,6 +532,7 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
         PlayerPrefs.SetString("PPSetting", "none");
     }
 
+    //mute music toggle
     public void muteMusic()
     {
         if (completionKeeper.gameObject.GetComponent<AudioSource>().mute == true)
@@ -510,6 +550,7 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
 
     }
 
+    //toggle turret targetting lasers
     public void toggleLasers()
     {
         if (completionKeeper.toggleLasers==true)
@@ -523,6 +564,7 @@ public class mainMenuController : MonoBehaviour//this script controls the main m
         completionKeeper.BackupDataToPlayerPrefs();
     }
 
+    //sound for all buttons
     public void ButtonSound()
     {
         buttonNoise.Play();

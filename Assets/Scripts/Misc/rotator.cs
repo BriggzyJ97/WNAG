@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class rotator : MonoBehaviour {
+public class rotator : MonoBehaviour {//this script rotates object in one axis or all axis 
 
     public enum RotationType
     {
@@ -15,13 +15,8 @@ public class rotator : MonoBehaviour {
     public RotationType ThisRotationType = RotationType.All;
 
     public float RotationSpeedMultiplyer = 1;
-
-	// Use this for initialization
-	void Start () {
-		
-	}
 	
-	// Update is called once per frame
+	// rotate object different ways based on which type of rotation wanted
 	void Update () {
 	    if (ThisRotationType== RotationType.X)
 	    {

@@ -2,22 +2,22 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class laserManager : MonoBehaviour
+public class laserManager : MonoBehaviour// this script manages the laser animation 
 {
-
-    private float timer1;
-    public GameObject gatheringSparks;
+    #region Variables
+    private float timer1; //  timer used to sequence laser
+    public GameObject gatheringSparks;//the sparks that gather into the fireball
     public GameObject fireball;
-    public GameObject godRays;
-    public GameObject lineSparks;
+    public GameObject godRays;//rays coming from fireball
+    public GameObject lineSparks;//sparks that fly from fireball in line
     public GameObject laserLine;
     public GameObject laserColider;
 
     public GameObject cameraMain;
     public bool isLaserDying = false;
-    
-	// Use this for initialization
-	void Start () {
+#endregion
+    // Use this for initialization
+    void Start () {
 		cameraMain = GameObject.FindGameObjectWithTag("MainCamera");
 	}
 	
@@ -27,6 +27,7 @@ public class laserManager : MonoBehaviour
 	    timer1 += Time.deltaTime;
 	    if (isLaserDying==false)
 	    {
+            //enlarge fireball
 	        if (timer1 > 3 && timer1 < 6)
 	        {
 	            godRays.GetComponent<ParticleSystem>().Play();
@@ -35,16 +36,19 @@ public class laserManager : MonoBehaviour
 	            godRays.transform.localScale += new Vector3(0.1f, 0.1f, 0.1f);
 	        }
 
+            //stop the gathering sparks
 	        if (timer1 > 3.5f)
 	        {
 	            gatheringSparks.GetComponent<ParticleSystem>().Stop();
 	        }
 
+            //start line sparks
 	        if (timer1 > 4f)
 	        {
 	            lineSparks.GetComponent<ParticleSystem>().Play();
 	        }
 
+            //grow actual laser
 	        if (timer1 > 7f && timer1 < 9f)
 	        {
 	            laserColider.GetComponent<CapsuleCollider>().radius += (0.06f * Time.deltaTime);
@@ -53,6 +57,7 @@ public class laserManager : MonoBehaviour
 	            laserLine.GetComponent<linePulser>().widthMultiplier += 0.7f * Time.deltaTime;
 	        }
 
+            //shrink laser and fireball then start it dying
 	        if (timer1 > 11f)
 	        {
 	            laserColider.GetComponent<CapsuleCollider>().radius -= (0.06f * Time.deltaTime);
@@ -71,6 +76,8 @@ public class laserManager : MonoBehaviour
 	            }
 	        }
         }
+
+        //destroy laser
 	    else
 	    {
 	        laserColider.GetComponent<CapsuleCollider>().enabled = false;

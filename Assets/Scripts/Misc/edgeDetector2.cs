@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class edgeDetector2 : MonoBehaviour
+public class edgeDetector2 : MonoBehaviour// same as edge detector script
 {
     
 

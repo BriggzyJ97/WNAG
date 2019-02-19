@@ -8,8 +8,8 @@ public class doorControl : MonoBehaviour // This script opens the door when anot
     public bool doorOpen = false;
     public GameObject leftDoor;
     public GameObject rightDoor;
-    public Transform leftDoorTarget;
-    public Transform rightDoorTarget;
+    public Transform leftDoorTarget;//where the left door should go when opened
+    public Transform rightDoorTarget;//where the right door should go when opened
     public float doorOpenSpeed;
 
     private AudioSource doorSound;
@@ -23,6 +23,7 @@ public class doorControl : MonoBehaviour // This script opens the door when anot
 	
 	// Update is called once per frame
 	void Update () {
+        //open door
 	    if (doorOpen==true)
 	    {
 	        if (soundTriggered==false)

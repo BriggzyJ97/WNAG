@@ -2,26 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class StorageBossCutsceneTrigger : MonoBehaviour
+public class StorageBossCutsceneTrigger : MonoBehaviour//this script triggers the boss fight starting
 {
 
-    public List<GameObject> lightsToToggle =  new List<GameObject>();
-    public List<GameObject> charactersToToggle = new List<GameObject>();
+    public List<GameObject> lightsToToggle =  new List<GameObject>();//all the lights to turn on/off for the boss fight
+    public List<GameObject> charactersToToggle = new List<GameObject>();//the actors to trigger
 
-    private bool Triggered = false;
+    private bool Triggered = false;//whether the boss fight is triggered
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
+    //toggle all the lights
     public void ToggleLights()
     {
+        
         foreach (GameObject light in lightsToToggle)
         {
             if (light.activeSelf==true)
@@ -45,6 +37,7 @@ public class StorageBossCutsceneTrigger : MonoBehaviour
         }
     }
 
+    //when the player enters area, trigger the actor
     void OnTriggerEnter(Collider other)
     {
         if (other.tag=="Player"&&Triggered==false)

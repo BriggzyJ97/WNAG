@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class laserCollision : MonoBehaviour
+public class laserCollision : MonoBehaviour //this script is the collision script for the big lasers
 {
 
     private float TurretDeathTimer;
@@ -18,6 +18,7 @@ public class laserCollision : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        //kill players if they touch it
         if (other.tag=="Player")
         {
             if (other.gameObject.GetComponent<playerController>() != null)
@@ -36,6 +37,7 @@ public class laserCollision : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
+        //change the colour of forcefields when they hit it
          if (other.tag == "ForceField")
          {
              line.GetComponent<linePulser>().targetGameObject.transform.position = other.transform.position;
@@ -47,6 +49,7 @@ public class laserCollision : MonoBehaviour
                 .SetColor("_MainColor", FFColor);
         }
 
+        //destroy turrets after a short duration
         if (other.tag=="Turret")
         {
             TurretDeathTimer += Time.deltaTime;

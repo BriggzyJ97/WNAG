@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class doorTrigger : MonoBehaviour
+public class doorTrigger : MonoBehaviour//trigger collider that opens a door when touched by player
 {
 
     public doorControl door;
@@ -10,7 +10,7 @@ public class doorTrigger : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("somethingEntered");
+        //open door
         if (other.tag=="Player")
         {
             Debug.Log("closeDoor");

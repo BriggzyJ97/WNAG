@@ -5,6 +5,8 @@ using UnityEngine.AI;
 using TMPro;
 using UnityEngine.UI;
 
+
+//THIS IS FOR THE OLD VERSION OF BOSS FIGHT, NOT USED
 public class bossFightController : MonoBehaviour {
 
     public enum BossStates

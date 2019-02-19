@@ -2,23 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DialogueTrigger : MonoBehaviour
+public class DialogueTrigger : MonoBehaviour//the collision detection to trigger entering the console in the dialogue levels
 {
 
     private GameObject gameManager;
     private bool triggered = false;
 
-	// Use this for initialization
+	//assign game manager
 	void Start () {
 		gameManager = GameObject.FindGameObjectWithTag("GameController");
 
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
+    //if player touches collider, trigger the console
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
@@ -31,6 +27,8 @@ public class DialogueTrigger : MonoBehaviour
             
         }
     }
+
+    //reset when player leaves collider
     void OnTriggerExit(Collider other)
     {
         if (other.tag == "Player")

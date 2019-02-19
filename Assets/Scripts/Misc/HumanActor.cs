@@ -2,27 +2,30 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HumanActor : MonoBehaviour
+public class HumanActor : MonoBehaviour//this script manages the actor objects that play out in cutscenes
 {
+    #region Variables
 
-    public string actorName;
-    public List<Transform> thisActorsMarks = new List<Transform>();
-    private bool actorOn = false;
+    public string actorName;//name of the actor, used for different movements
+    public List<Transform> thisActorsMarks = new List<Transform>();//list of positions the actor should move to
+    private bool actorOn = false; //whether the actor is on
 
-    private float actingTimer = 0;
-    private bool lookingAtPlayer = false;
+    private float actingTimer = 0;//timer used for sequencing actor movements
+    private bool lookingAtPlayer = false;// whether the actor is lookig at the player
     private GameObject player;
-    public GameObject cutsceneControl;
-    private bool lightsToggled = false;
+    public GameObject cutsceneControl;// control of the cutscene to trigger lights 
+    private bool lightsToggled = false;// whether to toggle the lights
 
-    private AudioSource audioSource;
+    private AudioSource audioSource;//footstep sound
     private bool audioOn = false;
 
-    public CloseAndOpenDoorControl doorToClose;
-    public newStorageBoss bossToTurnOn;
+    public CloseAndOpenDoorControl doorToClose;// door to close or open
+    public newStorageBoss bossToTurnOn; //boss
 
-	// Use this for initialization
-	void Start ()
+#endregion
+
+    // Use this for initialization
+    void Start ()
 	{
 	    player = GameObject.FindGameObjectWithTag("Player");
 	    audioSource = gameObject.GetComponent<AudioSource>();
@@ -32,6 +35,7 @@ public class HumanActor : MonoBehaviour
 	void Update () {
 	    if (actorOn == true)
 	    {
+            //movements and actions for actor one in storage boss stage
 	        if (actorName == "storageBoss1")
 	        {
 	            actingTimer += Time.deltaTime;
@@ -122,7 +126,9 @@ public class HumanActor : MonoBehaviour
 	                gameObject.transform.LookAt(player.transform.position);
                 }
 	        }
-	        else if (actorName == "storageBoss2")
+
+	        //movements and actions for actor two in storage boss stage
+            else if (actorName == "storageBoss2")
 	        {
 	            actingTimer += Time.deltaTime;
 	            if (actingTimer > 1f && actingTimer < 1.5f)
@@ -176,7 +182,10 @@ public class HumanActor : MonoBehaviour
 	            {
 	                gameObject.transform.LookAt(player.transform.position);
 	            }
-            }else if (actorName == "storageBoss3")
+            }
+
+	        //movements and actions for actor three in storage boss stage
+            else if (actorName == "storageBoss3")
             {
                 actingTimer += Time.deltaTime;
 
@@ -242,6 +251,7 @@ public class HumanActor : MonoBehaviour
 	    
 	}
 
+    //turn the actor on
     public void Trigger()
     {
         actorOn = true;

@@ -9,6 +9,8 @@ using UnityEngine.PostProcessing;
 
 public class GameStateManager : MonoBehaviour { //This script manages the states of the level, as well as pause menus, loading scenes
 
+    #region Variables
+
     public enum GameState //Level state
     {
         levelPlaying,
@@ -64,11 +66,11 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
     public DialogueManager dialogueController;
 
     private bool loadingToMainMenu;
-    
 
+#endregion
 
-    // Use this for initialization
-	void Start ()//assign variables and post processing settings
+    //assign variables and post processing settings
+    void Start ()
 	{
 	    staticNoise = gameObject.GetComponent<AudioSource>();
         completionKeeper = GameObject.FindGameObjectWithTag("CompletionKeeper").GetComponent<CompletionKeeper>();
@@ -115,6 +117,7 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
 	            isGamePaused = false;
 	        }
 	    }
+
         //get rid of fade (Not in currently)
 	    if (currentGameState==GameState.levelPlaying)
 	    {
@@ -124,8 +127,9 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
                 fade.GetComponent<Image>().color = new Color(0,0,0,alpha);
 	        }
 	    }
-        
-	    if (currentGameState==GameState.levelWin&&SceneManager.GetActiveScene().name!="StorageBoss") //When the player wins 
+
+	    //When the player wins 
+        if (currentGameState==GameState.levelWin&&SceneManager.GetActiveScene().name!="StorageBoss") 
 	    {
             //set all player doubles to disable
             if(TurretTurner.playerList!=null)
@@ -150,15 +154,19 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
             //open the door
 	        door.GetComponent<doorControl>().doorOpen = true;
 	        timer -= Time.deltaTime;
-	        if (timer<0)//timer to load the next scene
+
+	        //timer to load the next scene
+            if (timer<0)
 	        {
 	            currentGameState = GameState.levelEnd;
 	        }
 	    }
 
-	    if (currentGameState==GameState.levelEnd)// if the level ending
+	    // if the level ending
+        if (currentGameState==GameState.levelEnd)
 	    {
-	        if (fade.GetComponent<Image>().color.a < 0.99f)//fade to black
+	        //fade to black
+            if (fade.GetComponent<Image>().color.a < 0.99f)
 	        {
 	            if (fade.activeSelf==false)
 	            {
@@ -169,9 +177,12 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
 	            alpha += Time.deltaTime / 2;
 	            fade.GetComponent<Image>().color = new Color(0, 0, 0, alpha);
             }
-	        else
-	        {
-                //show the noise and cycle through different sprites of it
+
+            //then show the noise and cycle through different sprites of it
+            //after 1 sec load next levels, increment how many levels completed on keeper or go back to main menu if theres no more levels
+            else
+            {
+                
 	            if (noiseObject.activeSelf == false)
 	            {
 	                staticNoise.clip = staticSound;
@@ -200,7 +211,8 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
 	            noiseBar.GetComponent<RectTransform>().Translate(0, -barMoveSpeed * Time.deltaTime, 0);
 
 	            noiseTimer -= Time.deltaTime;
-	            if (noiseTimer < 0)//after 1 sec load next levels, increment how many levels completed on keeper or go back to main menu if theres no more levels
+                //after 1 sec load next levels, increment how many levels completed on keeper or go back to main menu if theres no more levels
+                if (noiseTimer < 0)
 	            {
 	                if (winText != null)
 	                {
@@ -237,9 +249,11 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
 	        }
         }
 
-	    if (currentGameState==GameState.levelLose) //if the player dies 
+	    //if the player dies 
+        if (currentGameState==GameState.levelLose) 
 	    {
-	        if (currentLoseState == LoseState.grabPass) //distort using the grab pass object
+	        //distort using the grab pass object
+            if (currentLoseState == LoseState.grabPass) 
 	        {
 	            if (grabPassObject.activeSelf==false)
 	            {
@@ -255,7 +269,10 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
 	            {
 	                currentLoseState = LoseState.tvNoise;
 	            }
-	        }else if (currentLoseState == LoseState.tvNoise) //show the tv static noise and cycle through sprite variations for it to animate
+	        }
+
+            //show the tv static noise and cycle through sprite variations for it to animate and reload scene
+            else if (currentLoseState == LoseState.tvNoise) 
 	        {
 	            if (noiseObject.activeSelf == false)
 	            {
@@ -292,26 +309,18 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
 	            }
             }
 	        
-	        
-	        /*
-	        if (fade.GetComponent<Image>().color.a <0.99f)
-	        {
-	            alpha += Time.deltaTime / 2;
-	            fade.GetComponent<Image>().color = new Color(0, 0, 0, alpha);
-            }
-	        else
-	        {
-	            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-	        }*/
         }
 
+        //if the game state moves into dialogue, trigger the dialogue controller
 	    if (currentGameState == GameState.levelDialogue)
 	    {
 	        dialogueController.Trigger();
 	    }
 
+        //if the player is loading to the main menu, do the static transition and then load main menu
 	    if (loadingToMainMenu==true)
 	    {
+            //static animation
 	        if (noiseObject.activeSelf == false)
 	        {
 	            staticNoise.clip = staticSound;
@@ -352,34 +361,43 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
 	    }
 	}
 
-    public void mainMenu() //start load to main menu
+
+    //start load to main menu
+    public void mainMenu() 
     {
         loadingToMainMenu = true;
     }
 
-    public void Resume() //get rid of pause menu
+    //get rid of pause menu
+    public void Resume() 
     {
         pauseMenu.SetActive(false);
         isGamePaused = false;
     }
 
-    public void Quit() //quit game
+    //quit game
+    public void Quit()
     {
         Application.Quit();
     }
-    public void OpenOptions()// open the options menu
+
+    // open the options menu
+    public void OpenOptions()
     {
         optionsMenu.SetActive(true);
         pauseMenu.SetActive(false);
     }
 
-    public void closeToPause() //go from options menu to pause menu
+    //go from options menu to pause menu
+    public void closeToPause() 
     {
         optionsMenu.SetActive(false);
         pauseMenu.SetActive(true);
     }
 
-    public void setPPtoMax() // change post processing settings
+
+    // change post processing settings
+    public void setPPtoMax() 
     {
         completionKeeper.currentPostProcessingSettings = CompletionKeeper.PostProcessingSettings.max;
         mainCamera.GetComponent<PostProcessingBehaviour>().profile = completionKeeper.cctvPPProfileMax;
@@ -400,6 +418,7 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
         PlayerPrefs.SetString("PPSetting", "none");
     }
 
+    //toggle the targetting lines on all turrets
     public void ToggleLasers()
     {
         if (completionKeeper.toggleLasers==true)

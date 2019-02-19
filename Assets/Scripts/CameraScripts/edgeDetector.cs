@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class edgeDetector : MonoBehaviour
+    //this script is put on the camera and enables the camera to read the depth normals produced by the edgeDetection shader
 {
 
     private Camera thisCamera;

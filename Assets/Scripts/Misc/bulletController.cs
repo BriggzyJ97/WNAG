@@ -5,7 +5,7 @@ using UnityEngine.Experimental.UIElements;
 
 public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND MANAGES COLLISIONS
 {
-
+    #region Variables
     public float bulletSpeed; //Speed of bullet
     public GameObject sparks; //Sparks Prefab that spawns when bullet hits wall
     public GameObject puff;
@@ -16,15 +16,14 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
     public bool isReflected = false;// Bool that keeps track of whether the bullet has been reflected
     public bool readyForReflected = true; //Makes sure that bullet doesnt keep reflecting infinitely when hitting mirro
     private float positionUpdateDelay = 0.1f;
-    public GameObject thisBulletsTurretForceField;
+    public GameObject thisBulletsTurretForceField;//the forcefield of the turret this bullet came from 
 
     public AudioSource bulletHitSound;
 
     private float CollisionDelay = 0.2f;
-    
+#endregion
 
-	// Use this for initialization
-	void Start ()
+    void Start ()
 	{
 	    lastPosition = transform.position; //Save first position to calculate direction
 	    bulletHitSound = gameObject.GetComponent<AudioSource>();
@@ -34,6 +33,7 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
 	// Update is called once per frame
 	void Update ()
 	{
+        // the bullet can't collide with anything within the first fraction of second when spawning
 	    if (CollisionDelay>0)
 	    {
 	        CollisionDelay -= Time.deltaTime;
@@ -42,29 +42,33 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
 	            gameObject.layer = 0;
 	        }
         }
-	    
-	    if (isReflected==false)
+
+	    //moves this bullet
+        if (isReflected==false)
 	    {
-            //moves this bullet
+            
 	        transform.Translate(bulletSpeed * Time.deltaTime, 0, 0);
         }
+
+        //moves bullet along new reflected direction
         else
-	    {
-            //moves bullet along new reflected direction
+        {
+            
             transform.Translate(directionOfBullet*bulletSpeed*Time.deltaTime, Space.World);
 	    }
-	    
 
-	    if (readyForReflected==false)
+	    //Makes sure th bullet doesnt infinitely reflect
+        if (readyForReflected==false)
 	    {
-            //Makes sure th bullet doesnt infinitely reflect
+            
 	        new WaitForSeconds(0.5f);
 	        readyForReflected = true;
 	    }
 
-	    if (directionOfBullet == new Vector3(0,0,0)&&CollisionDelay>0.5f)
+	    //a failsafe that makes sure that if the bullet stops moving for whatever reason it deletes itself
+        if (directionOfBullet == new Vector3(0,0,0)&&CollisionDelay>0.5f)
 	    {
-            //a failsafe that makes sure that if the bullet stops moving for whatever reason it deletes itself
+            
             Destroy(this.gameObject);
 	    }
 
@@ -74,9 +78,10 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
 
     void FixedUpdate()
     {
+        //Calculate direction the bullet is going
         if (positionUpdateBool == false)
         {
-            //Calculate direction of bullet
+            
             positionUpdateDelay -= Time.deltaTime;
             if (positionUpdateDelay<=0)
             {
@@ -90,18 +95,25 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Wall")//When bullet hits wall, spawn sparks and delete itself
+        //When bullet hits wall, spawn sparks and delete itself
+        if (other.gameObject.tag == "Wall")
         {
             bulletHitSound.Play();
             Instantiate(sparks, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
-        }else if (other.gameObject.tag == "WallTurret")//Or if bullet hits wall turret, spawn sparks and delete itself
+        }
+
+        //Or if bullet hits wall turret, spawn sparks and delete itself
+        else if (other.gameObject.tag == "WallTurret")
         {
             bulletHitSound.Play();
             //Debug.Log("wallturret hit");
             Instantiate(sparks, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
-        }else if (other.gameObject.tag == "Turret")//Or if bullet hits turret, shut it down, make it smoke, spawn sparks and delete bullet
+        }
+
+        //Or if bullet hits turret, shut it down, make it smoke, spawn sparks and delete bullet
+        else if (other.gameObject.tag == "Turret")
         {
             bulletHitSound.Play();
             other.GetComponentInChildren<TurretTurner>().ChangeToSmokeSound();
@@ -112,7 +124,11 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
             other.GetComponentInChildren<ParticleSystem>().Play();
             Instantiate(sparks, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
-        }else if (other.gameObject.tag == "VerticleMirror")// if bullet hits verticle mirror, Reflect bullet direction along the x-axis, rotate the bullet and make it now move by direction
+        }
+
+        // if bullet hits  mirror, Reflect bullet direction , rotate the bullet and make it now move by new direction
+        //MIRROR COLLLISION PERFORMED BY SEPERATE SCRIPT NOW
+        else if (other.gameObject.tag == "VerticleMirror")
         {
             if (readyForReflected==true)
             {
@@ -126,8 +142,8 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
                 readyForReflected = false;
             }
         }
-        else if (other.gameObject.tag == "DiagonalRightMirror"
-        ) // if bullet hits verticle mirror, Reflect bullet direction along the x-axis, rotate the bullet and make it now move by direction
+        
+        else if (other.gameObject.tag == "DiagonalRightMirror") 
         {
             if (readyForReflected == true)
             {
@@ -144,8 +160,8 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
                 readyForReflected = false;
             }
         }
-        else if (other.gameObject.tag == "DiagonalLeftMirror"
-        ) // if bullet hits verticle mirror, Reflect bullet direction along the x-axis, rotate the bullet and make it now move by direction
+        
+        else if (other.gameObject.tag == "DiagonalLeftMirror" ) 
         {
             if (readyForReflected == true)
             {
@@ -162,7 +178,8 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
                 readyForReflected = false;
             }
         }
-        else if (other.gameObject.tag == "HorizontalMirror")// if bullet hits verticle mirror, Reflect bullet direction along the y-axis, rotate the bullet and make it now move by direction
+        
+        else if (other.gameObject.tag == "HorizontalMirror")
         {
             if (readyForReflected == true)
             {
@@ -175,7 +192,10 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
                 //Debug.Log(directionOfBullet);
                 readyForReflected = false;
             }
-        }else if (other.gameObject.tag =="Player")//if bullet hits player, spawn sparks, make the player die, make the game end and destroy the bullet
+        }
+
+        //if bullet hits player, spawn sparks, make the player die, make the game end and destroy the bullet
+        else if (other.gameObject.tag =="Player")
         {
             Instantiate(sparks, transform.position, Quaternion.identity);
             if (other.gameObject.GetComponent<playerController>()!=null)
@@ -191,30 +211,19 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
             Destroy(this.gameObject);
             
         }
-        else if (other.gameObject.tag == "Player")//if bullet hits player, spawn sparks, make the player die, make the game end and destroy the bullet
-        {
-            Instantiate(sparks, transform.position, Quaternion.identity);
-            if (other.gameObject.GetComponent<playerController>() != null)
-            {
-                other.gameObject.GetComponent<playerController>().Die();
-            }
-            if (other.gameObject.GetComponent<playerDouble>() != null)
-            {
-                other.gameObject.GetComponent<playerDouble>().Die();
-            }
-            GameObject.FindGameObjectWithTag("GameController").GetComponent<GameStateManager>().currentGameState =
-                GameStateManager.GameState.levelLose;
-            Destroy(this.gameObject);
 
-        }
-        else if (other.gameObject.tag == "Box")//if bullet hits player, spawn sparks, make the player die, make the game end and destroy the bullet
+        //if bullet hits box prop, destroy it
+        else if (other.gameObject.tag == "Box")
         {
             Instantiate(sparks, transform.position, Quaternion.identity);
             Instantiate(puff, other.gameObject.transform.position, Quaternion.identity);
             Destroy(other.gameObject);
             Destroy(this.gameObject);
 
-        }else if (other.gameObject.tag == "WalkingEnemy")
+        }
+
+        //if bullet hits enemy, destroy enemy and bullet
+        else if (other.gameObject.tag == "WalkingEnemy")
         {
             if (other.gameObject.GetComponent<enemyController>().isAlive==true)
             {
@@ -223,14 +232,20 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
                 Destroy(this.gameObject);
             }
             
-        }else if (other.gameObject.tag=="BossWeakSpot")
+        }
+
+        //if bullet hits boss weak spot, lower health
+        else if (other.gameObject.tag=="BossWeakSpot")
         {
             Instantiate(sparks, transform.position, Quaternion.identity);
             other.gameObject.GetComponent<bossHealthController>().LowerHealth();
             Destroy(this.gameObject);
-        }else if (other.gameObject.tag=="ForceField" && other.gameObject != thisBulletsTurretForceField)
+        }
+
+        //if bullet hits forcefield, destroy bulet
+        else if (other.gameObject.tag=="ForceField" && other.gameObject != thisBulletsTurretForceField)
         {
-            Debug.Log("bulletHittingForceField");
+            //Debug.Log("bulletHittingForceField");
             bulletHitSound.Play();
             Instantiate(sparks, transform.position, Quaternion.identity);
             Destroy(this.gameObject);
@@ -239,13 +254,15 @@ public class bulletController : MonoBehaviour//THIS SCRIPT MOVES THE BULLET AND 
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.tag=="Mirror")// another thing to stop bullet infinitely reflecting
+        // another thing to stop bullet infinitely reflecting
+        if (other.gameObject.tag=="Mirror")
         {
             readyForReflected = true;
         }
     }
 
-    private Vector3 UpdateDirection()//calculate direction of bullet
+    //calculate direction of bullet
+    private Vector3 UpdateDirection()
     {
         Vector3 directionMoving = (transform.position - lastPosition).normalized;
         lastPosition = transform.position;

@@ -5,13 +5,16 @@ using UnityEngine;
 
 public class MoveBox : MonoBehaviour
 {
-    public bool isThisLeftBox = false;
-    public railController railControlScript;
+    //collision detection script to move the rail object
+
+    public bool isThisLeftBox = false; //is this the left side detection box
+    public railController railControlScript; //the main rail script
 
     
 
     void OnTriggerStay(Collider other)
     {
+        // if the detection script touches a player set the rail to moving and also detect if payer is sprinting
         if (other!=transform.parent)
         {
             if (other.tag == "Player")
@@ -53,6 +56,7 @@ public class MoveBox : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
+        //detect when the player moves away from the box
         if (other != transform.parent)
         {
             if (other.tag == "Player")

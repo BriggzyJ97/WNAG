@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class ToggleScript : MonoBehaviour {
-
-
-
+public class ToggleScript : MonoBehaviour {//this script toggles between various settings used in options menu
+    
     public enum ToggleType
     {
         lasersOnOff,
@@ -18,8 +16,11 @@ public class ToggleScript : MonoBehaviour {
     public ToggleType ThisToggleType = ToggleType.lasersOnOff;
 
     private int toggleValue = 2;
-	// Use this for initialization
-	void Start () {
+
+
+    //initialize toggle buttons
+    void Start () {
+        
 	    if (ThisToggleType == ToggleType.lasersOnOff)
 	    {
 	        if (PlayerPrefs.GetInt("lasersOn") == 1)
@@ -31,7 +32,10 @@ public class ToggleScript : MonoBehaviour {
 	            toggleValue = 2;
                 gameObject.GetComponent<TextMeshProUGUI>().text = "<off>";
             }
-        }else if (ThisToggleType == ToggleType.musicOnOff)
+        }
+
+       
+	    else if (ThisToggleType == ToggleType.musicOnOff)
 	    {
 	        if (PlayerPrefs.GetInt("musicMuted") == 1)
 	        {
@@ -43,7 +47,10 @@ public class ToggleScript : MonoBehaviour {
 	            toggleValue = 2;
 	            gameObject.GetComponent<TextMeshProUGUI>().text = "<on>";
 	        }
-        }else if (ThisToggleType == ToggleType.noneMinMax)
+        }
+
+       
+	    else if (ThisToggleType == ToggleType.noneMinMax)
 	    {
 	        if (PlayerPrefs.GetString("PPSetting") == "none")
 	        {
@@ -68,13 +75,9 @@ public class ToggleScript : MonoBehaviour {
         
 	}
 	
-	// Update is called once per frame
-	void Update () {
-		
-	}
-
     public void Toggle()
     {
+        //toggle targetting lasers on/off
         if (ThisToggleType == ToggleType.lasersOnOff)
         {
             if (toggleValue==1)
@@ -87,7 +90,10 @@ public class ToggleScript : MonoBehaviour {
                 toggleValue = 1;
                 gameObject.GetComponent<TextMeshProUGUI>().text = "<on>";
             }
-        }else
+        }
+
+        //toggle music on/off
+        else
         if (ThisToggleType == ToggleType.musicOnOff)
         {
             if (toggleValue == 1)
@@ -100,7 +106,10 @@ public class ToggleScript : MonoBehaviour {
                 toggleValue = 1;
                 gameObject.GetComponent<TextMeshProUGUI>().text = "<off>";
             }
-        }else if (ThisToggleType == ToggleType.noneMinMax)
+        }
+
+        //toggle post processing stack none/max/min
+        else if (ThisToggleType == ToggleType.noneMinMax)
         {
             if (toggleValue==1)
             {

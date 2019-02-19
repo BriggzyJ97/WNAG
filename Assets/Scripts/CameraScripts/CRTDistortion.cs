@@ -2,7 +2,7 @@
 using System.Collections;
 
 [ExecuteInEditMode]
-public class CRTDistortion : MonoBehaviour
+public class CRTDistortion : MonoBehaviour //This script interacts with the CRT distortion shader 
 {
     #region Variables
     public Shader curShader;

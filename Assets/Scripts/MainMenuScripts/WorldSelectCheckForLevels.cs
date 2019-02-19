@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+
+//this script checks for if the different departments shoulc be unlocked on the department select screen
 public class WorldSelectCheckForLevels : MonoBehaviour
 {
 
@@ -13,11 +15,6 @@ public class WorldSelectCheckForLevels : MonoBehaviour
 	void Start ()
 	{
 	    completionKeeper = GameObject.FindGameObjectWithTag("CompletionKeeper").GetComponent<CompletionKeeper>();
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
 	}
 
     public void checkForUnlock()

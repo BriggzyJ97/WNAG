@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class bossTargettingLine : MonoBehaviour
+public class bossTargettingLine : MonoBehaviour //this script manages the bosses targetting lines
 {
 
     public LayerMask TargetLineLayerMask;
@@ -16,7 +16,8 @@ public class bossTargettingLine : MonoBehaviour
 	// Update is called once per frame
 	void Update () {
 	    RaycastHit hit;
-	    if (Physics.Raycast(new Vector3(gameObject.transform.position.x, gameObject.transform.position.y-0.7f, gameObject.transform.position.z), gameObject.transform.TransformDirection(Vector3.right), out hit, Mathf.Infinity, TargetLineLayerMask))
+	    //Raycast is used to set the targetting line position and then set the start and end point of the targetting laser's line renderer.
+        if (Physics.Raycast(new Vector3(gameObject.transform.position.x, gameObject.transform.position.y-0.7f, gameObject.transform.position.z), gameObject.transform.TransformDirection(Vector3.right), out hit, Mathf.Infinity, TargetLineLayerMask))
 	    {
 	        //Debug.DrawRay(gameObject.transform.position, gameObject.transform.TransformDirection(Vector3.forward) * hit.distance, Color.red);
 	        tempLineRenderer.gameObject.transform.position =

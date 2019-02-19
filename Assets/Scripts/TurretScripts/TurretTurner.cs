@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class TurretTurner : MonoBehaviour // this script makes the turrets turn and manages them being down
 {
-
+    #region Variables
     public static List<GameObject> playerList = new List<GameObject>(); // static list of the player and all player doubles
     public bool turretDown = false; //is this turret down
     public float turretDownTimer = 3f; //temp variable for how long the turret is down for
@@ -19,14 +19,15 @@ public class TurretTurner : MonoBehaviour // this script makes the turrets turn 
     public GameObject targetPlayer;// the current closest player
     private AudioSource smokeSound; // the sound for the smoke 
     public AudioClip boopSound;// boop sound to show turret back online
-    public AudioClip smokeSoundClip;
+    public AudioClip smokeSoundClip;// sound effect for when the turret is down and smoking
 
-    private CompletionKeeper completionKeeper;
+    private CompletionKeeper completionKeeper;//the keeper script
 
-    public bool onDoubleLevel = false;
+    public bool onDoubleLevel = false;// is this level using the doubles mechanic
+#endregion
 
-	// Use this for initialization
-	void Start ()
+    //initializing variables, resetting PlayerList and spawning death timer UI elements
+    void Start ()
 	{
         //clear the player list and add the original player in the level to it 
 	    playerList.Clear();
@@ -46,13 +47,11 @@ public class TurretTurner : MonoBehaviour // this script makes the turrets turn 
 	
 	// Update is called once per frame
 	void Update () {
-        //fin the closest player
-        //Debug.Log(playerList);
+        //find the closest player
 	    if (onDoubleLevel==false)
 	    {
 	        targetPlayer = findClosestPlayer();
         }
-	    //targetPlayer = findClosestPlayer();
 
 
         if (turretDown==false&&targetPlayer!=null)//look at the closest player
@@ -60,18 +59,20 @@ public class TurretTurner : MonoBehaviour // this script makes the turrets turn 
 	        transform.LookAt(new Vector3(targetPlayer.transform.position.x, transform.position.y, targetPlayer.transform.position.z));
         }
 
-	    if (turretDown==true)//if the turret is down, make respawn start and show circle ui going up
+	    //if the turret is down, make turret respawn start and show circle ui going up
+        if (turretDown==true)
 	    {
 	        gameObject.transform.GetChild(0).GetComponentInChildren<TurretShooter>().isTargettingLaserOn = false;
 	        turretDownTimer -= Time.deltaTime;
 	        convertedDownTimerPercent = 1-(turretDownTimer / turretDownTimerMax);
-            //Debug.Log(convertedDownTimerPercent);
 	        tempDeathTimerSprite.GetComponent<Image>().fillAmount = convertedDownTimerPercent;
 	        tempDeathTimerSprite.transform.GetChild(0).gameObject.GetComponent<Image>().fillAmount =
 	            convertedDownTimerPercent;
 
 	    }
-	    if (turretDownTimer<0)// if the turret respawn timer ends bring the turret back up
+
+	    // if the turret respawn timer ends bring the turret back up
+        if (turretDownTimer<0)
 	    {
 	        if (tag!= "WallTurret")
 	        {
@@ -97,8 +98,8 @@ public class TurretTurner : MonoBehaviour // this script makes the turrets turn 
 	    
 
 	}
-
-    private GameObject findClosestPlayer()// find the closest player 
+    // find and return the closest player 
+    private GameObject findClosestPlayer()
     {
         GameObject closestPlayer = null;
         float distanceBetweenClosestPlayerAndTurret = 0;
@@ -118,6 +119,7 @@ public class TurretTurner : MonoBehaviour // this script makes the turrets turn 
         return closestPlayer;
     }
 
+    //change the current sound effect to the smoke sound effect
     public void ChangeToSmokeSound()
     {
         smokeSound.loop = true;
@@ -125,13 +127,5 @@ public class TurretTurner : MonoBehaviour // this script makes the turrets turn 
         smokeSound.pitch = 1f;
         smokeSound.clip = smokeSoundClip;
     }
-
-    public Vector3 GetWorldPositionOnPlane(Vector3 screenPosition, float z)
-    {
-        Ray ray = Camera.main.ScreenPointToRay(screenPosition);
-        Plane xy = new Plane(Vector3.forward, new Vector3(0, 0, z));
-        float distance;
-        xy.Raycast(ray, out distance);
-        return ray.GetPoint(distance);
-    }
+    
 }

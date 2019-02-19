@@ -6,8 +6,11 @@ using TMPro;
 using UnityEngine.Assertions.Must;
 
 public class DialogueManager : MonoBehaviour {
+    //this script manages the dialogue in the dialogue levels
 
-    public enum DialogueState
+    #region Variables
+
+    public enum DialogueState//different states of the console
     {
         preDialogue,
         zoomAndFade,
@@ -18,81 +21,85 @@ public class DialogueManager : MonoBehaviour {
 
     public DialogueState CurrentDialogueState = DialogueState.preDialogue;
 
-    private bool inDialogue = false;
+    private bool inDialogue = false;// if the player is in the dialogue
 
     private GameStateManager gameManager;
 
+    [Header("Camera and UI variables")]
     private GameObject mainCamera;
-    private float cameraSpeed = 10f;
+    private float cameraSpeed = 10f;//speed that camera zooms in towards console
     private GameObject UICanvas;
 
-    public Image fade;
-    private float alpha = 0;
+    public Image fade;//fade to black when entering console
+    private float alpha = 0;//alpha float to transition fade to black
 
-    public GameObject dialogueMenu;
-    public GameObject dialogueChat;
-    public TextMeshProUGUI newMessageText;
+    [Header("Console Variables")]
 
-    public Button OpenChatButton;
-    public TextMeshProUGUI openChatText;
+    public GameObject dialogueMenu;//consoles main menu
+    public GameObject dialogueChat;//consoles chat section
+    public TextMeshProUGUI newMessageText;//text box for new messages
 
-    private bool messagesRead = false;
-    private bool messagesLocked = false;
-    private float newMessageTimer = 0f;
-    private float newMessageYellowChange = 1f;
-    private bool newMessageIncreasing = false;
+    public Button OpenChatButton;// button for opening chat section from main menu
+    public TextMeshProUGUI openChatText;//text for the open chat button
 
-    public List<TextMeshProUGUI> chatTextList = new List<TextMeshProUGUI>();
-    public List<string> chatTexts = new List<string>();
-    public int chatPosition;
+    private bool messagesRead = false; //bool if chat section has been opened
+    private bool messagesLocked = false; //if the player is locked out of messages
+    private float newMessageTimer = 0f;//timer used to change the new messages text
+    private float newMessageYellowChange = 1f;//float used to flash new messages text in yellow
+    private bool newMessageIncreasing = false;//whether to increase the new messages count
 
-    private bool chatCursorBlinking = true;
-    public GameObject typeCursor;
-    private float cursorBlinkTime = 0.25f;
+    public List<TextMeshProUGUI> chatTextList = new List<TextMeshProUGUI>();//list of chat section text boxes
+    public List<string> chatTexts = new List<string>();//list of strings that comprise the possible messages that are sent 
+    public int chatPosition;//how many lines have been typed
 
-    public float letterPause = 0.1f;
+    private bool chatCursorBlinking = true;//whether the chat cursor should be blinking
+    public GameObject typeCursor;//the chat cursor
+    private float cursorBlinkTime = 0.25f;// how fast the chat Cursor blinks
+
+    public float letterPause = 0.1f;// the pause between each letter is added to the textbox
     private bool hasTextChanged;
 
-    public bool hasTriggered = true;
-    public bool hasTextTyped = false;
+    public bool hasTriggered = true;//has the text been triggered to start typing
+    public bool hasTextTyped = false;//has text been typed out
 
-    private Color greenText = new Color(0,1,0,1);
-    private Color redText = new Color(1,0,0,1);
+    private readonly Color greenText = new Color(0,1,0,1);//green text colour
+    private readonly Color redText = new Color(1,0,0,1);//red text colour
 
-    public GameObject TwoChatOptions;
-    public GameObject ThreeChatOptions;
-    public GameObject InputChatOptions;
-    public GameObject chatTextHolder;
+    public GameObject TwoChatOptions;//chat option panel that has two options
+    public GameObject ThreeChatOptions;// chat option panel that has three options
+    public GameObject InputChatOptions;//chat option panel with a input-able text box
+    public GameObject chatTextHolder;//holder for all the text boxes to move up when screen full
 
-    private bool responseTrigger = false;
-    private int numberOfResponses = 0;
-    private int whichResponseNeeded;
+    private bool responseTrigger = false; // whether the player is expecting a response
+    private int numberOfResponses = 0; //how many responses needed
+    private int whichResponseNeeded; //which response is needed depending on what player has said
 
-    private bool inputtingText = false;
-    public TextMeshProUGUI inputTextBox;
-    public GameObject inputTypeCursor;
-    private float inputCursorBlinkTime = 0.25f;
-    private bool inputCursorBlinking = true;
-    private float blinkPause = 1f;
+    private bool inputtingText = false;//whether text is being inputted
+    public TextMeshProUGUI inputTextBox;//the text box used for inputting
+    public GameObject inputTypeCursor;//the cursor for the input box
+    private float inputCursorBlinkTime = 0.25f;//how quickly the input cursor blinks
+    private bool inputCursorBlinking = true;//whether the input type cursor should be blinking
+    private float blinkPause = 1f;//gap between blinks
 
     private CompletionKeeper completionTracker;
 
-    public doorControl door;
+    public doorControl door;//the door in the room
 
-    public string playerName = "";
-    private bool chatHacked = false;
-    private int chatHackPos = 0;
-    private float chatHackTime = 0.2f;
-    private bool skipText = false;
+    public string playerName = "";//what the player inputted their name as
+    private bool chatHacked = false;//whether chat has been hacked and is shutting down
+    private int chatHackPos = 0;//what line is currently being hacked
+    private float chatHackTime = 0.2f;//how quickly the chat gets hacked
+    private bool skipText = false;//whether the player is skipping the text typing out
 
+    [Header("Sound Effects")]
     private AudioSource audioSource;
     public AudioSource morseCodeSoundSource;
     public AudioSource demonHackSoundSource;
     public AudioSource buttonSoundSource;
 
+#endregion
 
-
-    // Use this for initialization
+    // assign variables
     void Start ()
     {
         audioSource = gameObject.GetComponent<AudioSource>();
@@ -103,7 +110,7 @@ public class DialogueManager : MonoBehaviour {
         
 	}
 	
-	// Update is called once per frame
+	
 	void Update () {
 	    if (inDialogue == true)
 	    {
@@ -111,7 +118,9 @@ public class DialogueManager : MonoBehaviour {
 	        if (CurrentDialogueState==DialogueState.preDialogue)
 	        {
 	            CurrentDialogueState = DialogueState.zoomAndFade;
-	        }else 
+	        }
+            //move the camera down towards the console while shifting fov out to give dolly zoom effect, fade to black, swap canvas mode and post processing stack, bring up main menu of console
+	        else 
 	        if (CurrentDialogueState == DialogueState.zoomAndFade)
 	        {
                 mainCamera.transform.Translate(0,0, cameraSpeed * Time.deltaTime);
@@ -127,12 +136,17 @@ public class DialogueManager : MonoBehaviour {
                     dialogueMenu.SetActive(true);
 	                CurrentDialogueState = DialogueState.menu;
 	            }
-	        }else if (CurrentDialogueState == DialogueState.menu)
+	        }
+
+            //main menu of the console
+	        else if (CurrentDialogueState == DialogueState.menu)
 	        {
 	            if (completionTracker != null)
 	            {
 	                completionTracker.GetComponent<AudioSource>().volume = 0.02f;
 	            }
+
+                //have new messages pop up if they are unread, or lock the chat section of console if its been hacked
                 if (messagesLocked==false)
 	            {
 	                if (messagesRead == false)
@@ -184,12 +198,17 @@ public class DialogueManager : MonoBehaviour {
 	            }
 	            
 	            
-	        }else if (CurrentDialogueState == DialogueState.chat)
+	        }
+            //chat section of console
+	        else if (CurrentDialogueState == DialogueState.chat)
 	        {
+                //skip forward text if mouse pressed
 	            if (Input.GetKeyDown(KeyCode.Mouse0))
 	            {
 	                Tap();
                 }
+
+                //blink chat cursor
 	            if (chatCursorBlinking==true)
 	            {
 	                cursorBlinkTime -= Time.deltaTime;
@@ -207,6 +226,7 @@ public class DialogueManager : MonoBehaviour {
 	                }
                 }
 
+                //if the robot should give response, make the correct response, including chaining responses if necessary
 	            if (responseTrigger==true)
 	            {
                     //Debug.Log("makeResponse");
@@ -268,6 +288,7 @@ public class DialogueManager : MonoBehaviour {
                     responseTrigger = false;
 	            }
 
+                //let the player input text if the input text box is up
 	            if (inputtingText==true)
 	            {
 	                foreach (char c in Input.inputString)
@@ -291,7 +312,7 @@ public class DialogueManager : MonoBehaviour {
 	                        inputTextBox.text += c;
 	                    }
 	                }
-
+                    //blink the input typing cursor
 	                if (inputCursorBlinking==true)
 	                {
 	                    inputCursorBlinkTime -= Time.deltaTime;
@@ -314,6 +335,7 @@ public class DialogueManager : MonoBehaviour {
 	                }
                 }
 
+                //if the chat is hacked, go through line by line "hacking it"
 	            if (chatHacked == true)
 	            {
                     if(chatHackPos<=chatTextList.Count)
@@ -336,7 +358,10 @@ public class DialogueManager : MonoBehaviour {
 	                }
 
 	            }
-	        }else if (CurrentDialogueState==DialogueState.quitDialogue)
+
+	        }
+            //if the player quits the console reverse earlier changes to camera and ui and fade from black
+	        else if (CurrentDialogueState==DialogueState.quitDialogue)
 	        {
 	            dialogueMenu.SetActive(false);
                 mainCamera.transform.Translate(0, 0, -cameraSpeed * Time.deltaTime);
@@ -359,12 +384,13 @@ public class DialogueManager : MonoBehaviour {
 	        completionTracker.GetComponent<AudioSource>().volume = 0.06f;
         }
 	}
-
+    //when the player steps on console pad, triggered from external collision script
     public void Trigger()
     {
         inDialogue = true;
     }
 
+    //when chat button pressed
     public void OpenChat()
     {
         messagesRead = true;
@@ -374,17 +400,20 @@ public class DialogueManager : MonoBehaviour {
 
     }
 
+    //when open door button pressed
     public void OpenDoor()
     {
         door.doorOpen = true;
         
     }
 
+    //when any button pressed, make sound
     public void ButtonSound()
     {
         buttonSoundSource.Play();
     }
 
+    //when the console is quit from
     public void QuitConsole()
     {
         mainCamera.GetComponent<cameraModeSwap>().SwapCameraMode();
@@ -393,6 +422,7 @@ public class DialogueManager : MonoBehaviour {
         CurrentDialogueState = DialogueState.quitDialogue;
     }
 
+    //when the player goes from the chat menu to the main menu of the console
     public void BackToConsole()
     {
         dialogueMenu.SetActive(true);
@@ -400,6 +430,7 @@ public class DialogueManager : MonoBehaviour {
         CurrentDialogueState = DialogueState.menu;
     }
 
+    //when option 1 of the two option selection is pressed while chatting
     public void TwoChatOption1()
     {
         skipText = false;
@@ -409,6 +440,7 @@ public class DialogueManager : MonoBehaviour {
         TwoChatOptions.SetActive(false);
     }
 
+    //when option 2 of the two option selection is pressed while chatting
     public void TwoChatOption2()
     {
         skipText = false;
@@ -418,6 +450,7 @@ public class DialogueManager : MonoBehaviour {
         TwoChatOptions.SetActive(false);
     }
 
+    //when option 1 of the three option selection is pressed while chatting
     public void ThreeChatOption1()
     {
         skipText = false;
@@ -426,6 +459,8 @@ public class DialogueManager : MonoBehaviour {
         whichResponseNeeded = 11;
         ThreeChatOptions.SetActive(false);
     }
+
+    //when option 2 of the three option selection is pressed while chatting
     public void ThreeChatOption2()
     {
         skipText = false;
@@ -434,6 +469,8 @@ public class DialogueManager : MonoBehaviour {
         whichResponseNeeded = 12;
         ThreeChatOptions.SetActive(false);
     }
+
+    //when option 3 of the three option selection is pressed while chatting
     public void ThreeChatOption3()
     {
         skipText = false;
@@ -443,6 +480,7 @@ public class DialogueManager : MonoBehaviour {
         ThreeChatOptions.SetActive(false);
     }
 
+    //when the player submits their inputted text
     public void Submit()
     {
 
@@ -462,15 +500,18 @@ public class DialogueManager : MonoBehaviour {
 
     }
 
+
+    //text typing corouting
     IEnumerator TypeText(string messageToType, TextMeshProUGUI textField)
     {
         hasTextTyped = true;
+        //type out each character in the message one by one with some special characters performing diferent actions
         foreach (char letter in messageToType.ToCharArray())
         {
             if (skipText==false)
             {
 
-
+                //if a ~ character is in the message flash the cursor and pause the typing for a little bit
                 if (letter.ToString() == "~")
                 {
                     typeCursor.gameObject.GetComponent<RectTransform>().anchoredPosition = new Vector2(
@@ -482,6 +523,8 @@ public class DialogueManager : MonoBehaviour {
 
 
                 }
+
+                //if a _ character is in the message, move the cursor down by 1 line
                 else if (letter.ToString() == "_")
                 {
                     chatCursorBlinking = false;
@@ -489,22 +532,32 @@ public class DialogueManager : MonoBehaviour {
                         typeCursor.gameObject.GetComponent<RectTransform>().anchoredPosition.x,
                         typeCursor.gameObject.GetComponent<RectTransform>().anchoredPosition.y - 30);
                 }
+
+                //if a { character is in the message, start typing sound
                 else if (letter.ToString() == "{")
                 {
                     audioSource.Play();
                 }
+
+                //if a } character is in the message, stop typing sound
                 else if (letter.ToString() == "}")
                 {
                     audioSource.Stop();
                 }
+
+                //if a £ character is in the message, start morse code sound
                 else if (letter.ToString() == "£")
                 {
                     morseCodeSoundSource.Play();
                 }
+
+                //if a $ character is in the message, start morse code sound
                 else if (letter.ToString() == "$")
                 {
                     morseCodeSoundSource.Stop();
                 }
+
+                //if a _ character is in the message, move the cursor down by 1 line (same as _ fix)
                 else if (letter.ToString() == ":")
                 {
                     chatCursorBlinking = false;
@@ -512,35 +565,49 @@ public class DialogueManager : MonoBehaviour {
                         typeCursor.gameObject.GetComponent<RectTransform>().anchoredPosition.x,
                         typeCursor.gameObject.GetComponent<RectTransform>().anchoredPosition.y - 30);
                 }
+
+                //if a ; character is in the message, bring up three chat options
                 else if (letter.ToString() == ";")
                 {
                     ThreeChatOptions.SetActive(true);
                 }
+
+                //if a ] character is in the message, bring up input chat options
                 else if (letter.ToString() == "]")
                 {
                     InputChatOptions.SetActive(true);
                     inputtingText = true;
 
                 }
+
+                //if a [ character is in the message, hack the chat
                 else if (letter.ToString() == "[")
                 {
                     chatHacked = true;
                 }
+
+                //if a + character is in the message, blink the chat cursor
                 else if (letter.ToString() == "+")
                 {
                     //letterPause = letterPause - 0.1f;
                     chatCursorBlinking = true;
                 }
+
+                //if a @ character is in the message, add another response to be said
                 else if (letter.ToString() == "@")
                 {
                     numberOfResponses += 1;
                     responseTrigger = true;
                 }
+
+                //if a # character is in the message, move down one line of text boxes
                 else if (letter.ToString() == "#")
                 {
                     //textTyperToTrigger.GetComponent<TextTypingController>().hasTriggered = true;
                     chatPosition++;
                 }
+
+                //otherwise input into the text box
                 else
                 {
                     chatCursorBlinking = false;
@@ -551,6 +618,7 @@ public class DialogueManager : MonoBehaviour {
 
                 }
             }
+            //if the chat is being skipped instantly type out the line
             else
             {
                 if (letter.ToString() == "~")
@@ -631,6 +699,7 @@ public class DialogueManager : MonoBehaviour {
         skipText = false;
     }
 
+    //coroutine that waits for a few seconds unless the player taps, which returns it immediately
     IEnumerator WaitForSecondsOrTap(float seconds)
     {
         blinkPause = seconds;
@@ -641,6 +710,7 @@ public class DialogueManager : MonoBehaviour {
         }
     }
 
+    //tap to end above coroutine
     private void Tap()
     {
         blinkPause = 0;

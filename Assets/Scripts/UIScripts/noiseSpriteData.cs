@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "Scriptable Objects", menuName = "noiseSpriteData", order = 1)]
-public class noiseSpriteData : ScriptableObject // scriptable object for the different noise sprites
+// scriptable object for the different noise sprites
+public class noiseSpriteData : ScriptableObject 
 {
 
     public Sprite noise1;

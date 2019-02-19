@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class textFlasher : MonoBehaviour
+public class textFlasher : MonoBehaviour //Makes text slowly increase and decrease in alpha
 {
 
     private float alpha = 0;
@@ -19,7 +19,7 @@ public class textFlasher : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
-	    
+	    //pingpong alpha between on and off
 	    if (states=="flashing")
 	    {
 	        t = Mathf.PingPong(Time.time, 1);
@@ -28,7 +28,9 @@ public class textFlasher : MonoBehaviour
 	        //Debug.Log("alpha: "+alpha);
 	        textColor = new Color(textColor.r, textColor.g, textColor.b, alpha);
 	        gameObject.GetComponent<TextMeshProUGUI>().color = textColor;
-        }else if (states =="turnOff")
+        }
+        //otherwise just decreasea alpha till its zero
+	    else if (states =="turnOff")
 	    {
 	        if (alpha>0)
 	        {
@@ -43,6 +45,4 @@ public class textFlasher : MonoBehaviour
 	        gameObject.GetComponent<TextMeshProUGUI>().color = textColor;
         }
 	}
-
-    
 }

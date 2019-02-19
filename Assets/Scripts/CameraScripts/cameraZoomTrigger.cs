@@ -2,23 +2,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class cameraZoomTrigger : MonoBehaviour
+public class cameraZoomTrigger : MonoBehaviour //This is the trigger that is put on a trigger collider to zoom the camera out
 {
 
-    private CameraBossControl camera;
+    private CameraBossControl cameraScript;
 
 	// Use this for initialization
 	void Start ()
 	{
-	    camera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraBossControl>();
+	    cameraScript = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<CameraBossControl>();
 	}
 
+    //if the player hits this trigger zoom camera out
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")
         {
-            camera.currentCameraStates = CameraBossControl.CameraStates.moveUp;
-            camera.startTime = Time.time;
+            cameraScript.currentCameraStates = CameraBossControl.CameraStates.moveUp;
+            cameraScript.startTime = Time.time;
         }
     }
 }

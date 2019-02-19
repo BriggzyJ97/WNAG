@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class TurretManager : MonoBehaviour {//This script manages all of the different turrets 
 
-
+    #region Variables
     public List<GameObject> turretList = new List<GameObject>(); //list of all the turrets in the level
 
     public float turretCooldown; //
@@ -20,11 +20,12 @@ public class TurretManager : MonoBehaviour {//This script manages all of the dif
     }
 
     public turretStates globalTurretState = turretStates.idle;
-
-	// Use this for initialization
-	void Start ()
+    #endregion
+    // turns the targetting laser on for all turrets in the scene if the option is selected in options
+    void Start ()
 	{
-	    completionKeeper = GameObject.FindGameObjectWithTag("CompletionKeeper").GetComponent<CompletionKeeper>();
+	    
+        completionKeeper = GameObject.FindGameObjectWithTag("CompletionKeeper").GetComponent<CompletionKeeper>();
 	    if (completionKeeper!=null)
 	    {
 	        if (completionKeeper.toggleLasers==false)
@@ -46,12 +47,14 @@ public class TurretManager : MonoBehaviour {//This script manages all of the dif
 	
 	// Update is called once per frame
 	void Update () {
-	    if (turretDuration>0)
+	    //cooldown to stop all turrets shooting too quick, must be below 0
+        if (turretDuration>0)
 	    {
 	        turretDuration -= Time.deltaTime;
 	    }
 
-	    if (Input.GetMouseButtonDown(0)&&turretDuration<=0&&gameObject.GetComponent<GameStateManager>().isGamePaused==false) //when the player clicks the mouse the turrets shoot
+	    //when the player clicks the mouse the turrets shoot
+        if (Input.GetMouseButtonDown(0)&&turretDuration<=0&&gameObject.GetComponent<GameStateManager>().isGamePaused==false) 
 	    {
 	        foreach (GameObject turret in turretList)//make all turrets in list of turrets shoot
 	        {
@@ -64,13 +67,14 @@ public class TurretManager : MonoBehaviour {//This script manages all of the dif
 	        }
 	    }
 
-	    if (AreAllTurretsDead()==true&&gameObject.GetComponent<GameStateManager>().currentGameState==GameStateManager.GameState.levelPlaying)//changes the gameState to win if all the turrets are down
+	    //changes the gameState to win if all the turrets are down
+        if (AreAllTurretsDead()==true&&gameObject.GetComponent<GameStateManager>().currentGameState==GameStateManager.GameState.levelPlaying)
 	    {
 	        gameObject.GetComponent<GameStateManager>().currentGameState = GameStateManager.GameState.levelWin;
 	    }
 	}
-
-    private bool AreAllTurretsDead()//checks if all of the turrets are dead and returns true if they are
+    //checks if all of the turrets are dead and returns true if they are
+    private bool AreAllTurretsDead()
     {
         for (int i = 0; i < turretList.Count; i++)
         {

@@ -4,28 +4,30 @@ using UnityEngine;
 
 public class railController : MonoBehaviour
 {
+    //this script controls the rail mechanic
+    #region Variables
 
-    public float railMoveSpeed;
-    private float widthAdjustmentMultiplier;
+    public float railMoveSpeed;// movement speed of rail
+    private float widthAdjustmentMultiplier; //scaling multiplier based on the width of the rail
 
-    public Transform endStop1;
-    public Transform endStop2;
+    public Transform endStop1;//one end of the rail
+    public Transform endStop2;//the other end of the rail
 
-    public Transform rail1;
+    public Transform rail1; //the rail object
 
-    public GameObject movingObject;
+    public GameObject movingObject; //the object on the rail
 
-    public string startPoint;
+    public string startPoint; //where the rail starts either left middle or right
 
-    public Transform endPointLeft;
-    public Transform endPointRight;
+    public Transform endPointLeft; //where the rail object ends
+    public Transform endPointRight; //where the rail object ends
 
-    public bool isLeftBlocked = false;
-    public bool isRightBlocked = false;
+    public bool isLeftBlocked = false; //is the left side of the rail object blocked, detected by external script
+    public bool isRightBlocked = false; //is the left side of the rail object blocked, detected by external script
 
-    public bool isPlayerSprinting = false;
+    public bool isPlayerSprinting = false; //detection if the player is sprinting when touching the object
 
-    public enum railMovement
+    public enum railMovement //movement direction of object
     {
         idle,
         movingLeft,
@@ -34,18 +36,25 @@ public class railController : MonoBehaviour
 
     public railMovement CurrentDirectionOfRailMovement = railMovement.idle;
 
-	// Use this for initialization
-	void Start () {
-		endStop1.LookAt(endStop2);
+    #endregion
+
+    // position rail between the end points and make them look at each other, scaling correctly. 
+    //Set the endPoints depending on width of object so that it ends by hitting the end rails
+    //set the position and rotation of moving object depending on its start point 
+    void Start () {
+        // position rail between the end points and make them look at each other
+        endStop1.LookAt(endStop2);
         endStop2.LookAt(endStop1);
 	    Vector3 VectorThreeBetweenEndPoints = endStop1.position - endStop2.position;
 	    rail1.position = endStop1.position - (VectorThreeBetweenEndPoints / 2);
         rail1.LookAt(endStop1.position);
         rail1.Rotate(0,90,0);
 
+        //scale the rail
 	    float DistanceBetweenEndPoints = Vector3.Distance(endStop1.position, endStop2.position);
         rail1.localScale = new Vector3((DistanceBetweenEndPoints-0.167f)/9.16f,1,1);
 	    
+        //set the endPoints depending on width of object so that it ends by hitting the end rails
 	    float WidthOfMovingObject = movingObject.GetComponent<Renderer>().bounds.size.x;
         Debug.Log(WidthOfMovingObject);
 	    widthAdjustmentMultiplier = 0.642f - (0.0507f * Mathf.Log(WidthOfMovingObject));
@@ -53,6 +62,7 @@ public class railController : MonoBehaviour
 	    endPointLeft.position = endStop1.transform.position - ((VectorThreeBetweenEndPoints.normalized) * (WidthOfMovingObject *widthAdjustmentMultiplier));
 	    endPointRight.position = endStop2.transform.position + ((VectorThreeBetweenEndPoints.normalized) * (WidthOfMovingObject *widthAdjustmentMultiplier));
 
+        //set the position and rotation of moving object depending on its start point 
 	    if (startPoint == "left")
 	    {
 	        movingObject.transform.position = endPointLeft.position;
@@ -75,6 +85,8 @@ public class railController : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
+
+        //if the rail is moving left and is not blocked, move left, double speed if player is sprinting
 	    if (CurrentDirectionOfRailMovement == railMovement.movingLeft&&isRightBlocked==false)
 	    {
 	        if (isPlayerSprinting==true)
@@ -88,7 +100,9 @@ public class railController : MonoBehaviour
 	                railMoveSpeed * Time.deltaTime);
             }
 	        
-	    }else if (CurrentDirectionOfRailMovement==railMovement.movingRight&&isLeftBlocked==false)
+	    }
+        //same as above with right
+	    else if (CurrentDirectionOfRailMovement==railMovement.movingRight&&isLeftBlocked==false)
 	    {
 	        if (isPlayerSprinting == true)
 	        {

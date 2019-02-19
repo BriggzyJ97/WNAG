@@ -2,23 +2,23 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class bossRayShooter : MonoBehaviour
+public class bossRayShooter : MonoBehaviour//this script controls the detection for the boss rays
 {
 
-    private bool hitPlayer = false;
-    private bool hitTurret = false;
+    private bool hitPlayer = false;//whether the box is hitting playr
+    private bool hitTurret = false;//whether the box is hitting turret
     
-    public int playerHitCounter = 0;
-    public int turretHitCounter = 0;
+    public int playerHitCounter = 0;//how many times the player has been hit with box
+    public int turretHitCounter = 0;//how many times a turret has been hit with box
 
-    public GameObject lastTurretHit;
+    public GameObject lastTurretHit;// the last turret that was hit
 
-    public bool hitBack = false;
+    public bool hitBack = false;// whether the back facing target has been hit
 
     
    
 	
-	// Update is called once per frame
+	// detection on what is being hit by box
     void OnTriggerEnter(Collider other)
     {
         if (other.tag == "Player")

@@ -5,21 +5,22 @@ using UnityEngine.Experimental.UIElements;
 
 public class playerController : MonoBehaviour //script controls the player
 {
-    //player movement speed variables
-    public float playerSpeedHorizontal;
+    #region Variables
+
+    [Header("Player movement variables")]
+    public float playerSpeedHorizontal;//player movement speed
     public float playerSpeedVertical;
     public float playerSpeedMin;
     public float playerSpeedMax;
-    public float movingAcceleration = 1.1f;
-    public float movingDecceleration = 0.9f;
+    public float movingAcceleration = 1.1f;// acceleration variable for creating speed curve
+    public float movingDecceleration = 0.9f;// decceleration variable for creating speed curve
 
-    private Rigidbody myRB;
+    private Rigidbody myRB; //players rigidbody
 
     public Vector3 moveVelocity;
+    
 
-    private Vector3 mousePosition;
-
-    private float sprintMultiplier = 2.3f;
+    private float sprintMultiplier = 2.3f;// sprint modifier 
 
     public enum LeftRightState//movement states
     {
@@ -46,14 +47,16 @@ public class playerController : MonoBehaviour //script controls the player
 
     public GameObject playerDeathParticles;//prefab for players death particles
 
-    private AudioSource playerAudioSource;
+    private AudioSource playerAudioSource;//audio source and sounds
     private bool audioLock = false;
     public AudioClip playerDeathExplosion;
 
-    public bool isPlayerSprinting = false;
+    public bool isPlayerSprinting = false;// is the player currently sprinting
 
-    // Use this for initialization
-    void Start ()//assign variables
+    #endregion
+
+    //assign variables
+    void Start ()
     {
         myRB = gameObject.GetComponent<Rigidbody>();
         gameStateManager = GameObject.FindGameObjectWithTag("GameController").GetComponent<GameStateManager>();
@@ -64,7 +67,8 @@ public class playerController : MonoBehaviour //script controls the player
 	// Update is called once per frame
 	void Update () {
         transform.position = new Vector3(transform.position.x, 0.9f, transform.position.z);//always make sure the players height sounds the same 
-        //PLAYER MOVEMENT
+
+        //PLAYER MOVEMENT, based in WASD inputs and using acceleration
 	    if (gameStateManager.isGamePaused==false&& gameStateManager.currentGameState!=GameStateManager.GameState.levelDialogue)//can only move if the game isn't paused 
 	    {
 	        if (Input.GetKey(KeyCode.A) == true && Input.GetKey(KeyCode.D) != true)
@@ -113,6 +117,8 @@ public class playerController : MonoBehaviour //script controls the player
 	            }
 	        }
         }
+
+        //otherwise decellarate down to standstill
 	    else
 	    {
 	        currentLeftRightState = LeftRightState.idle;
@@ -127,7 +133,7 @@ public class playerController : MonoBehaviour //script controls the player
 	        }
         }
 	    
-        //making the player move 
+        //making the player move left and right and walking sound
 	    if (currentLeftRightState==LeftRightState.left)
 	    {
 	        if (audioLock == false)
@@ -141,7 +147,8 @@ public class playerController : MonoBehaviour //script controls the player
 	            playerSpeedHorizontal = playerSpeedHorizontal * (movingAcceleration);
 	        }
 	        moveVelocity = new Vector3(-playerSpeedHorizontal, moveVelocity.y, moveVelocity.z);
-	    }else if (currentLeftRightState == LeftRightState.right)
+	    }
+	    else if (currentLeftRightState == LeftRightState.right)
 	    {
 	        if (audioLock == false)
 	        {
@@ -174,7 +181,9 @@ public class playerController : MonoBehaviour //script controls the player
 	            moveVelocity = new Vector3(0, moveVelocity.y, moveVelocity.z);
 	        }
 	    }
-	    if (currentUpDownState == UpDownState.up)
+
+        //making the player move up and down and walking sound
+        if (currentUpDownState == UpDownState.up)
 	    {
 	        if (audioLock == false)
 	        {
@@ -225,7 +234,7 @@ public class playerController : MonoBehaviour //script controls the player
     }
     void FixedUpdate()
     {
-        //apply move velocity to the rigidbody
+        //apply move velocity to the rigidbody, doubling if sprinting
         if (Input.GetKey(KeyCode.LeftShift)||Input.GetKey(KeyCode.Mouse1))
         {
             myRB.velocity = (moveVelocity * Time.deltaTime)*sprintMultiplier;
@@ -237,7 +246,7 @@ public class playerController : MonoBehaviour //script controls the player
             isPlayerSprinting = false;
         }
         
-
+        //stop movement if it gets too low to stop sliding 
         if (moveVelocity.x <= 0.01f && moveVelocity.x >= -0.01f)
         {
             moveVelocity.x = 0f;
@@ -251,6 +260,7 @@ public class playerController : MonoBehaviour //script controls the player
             moveVelocity.z = 0f;
         }
 
+        //stop walking sound
         if (moveVelocity.x == 0f &&moveVelocity.y == 0f && moveVelocity.z == 0f)
         {
             playerAudioSource.loop = false;
@@ -259,9 +269,10 @@ public class playerController : MonoBehaviour //script controls the player
 
     }
 
+    //when the player dies, make his model invisible and spawn the feath particles
     public void Die()
     {
-        //when the player dies, make his model invisible and spawn the feath particles
+        
         playerAudioSource.clip = playerDeathExplosion;
         playerAudioSource.loop = false;
         playerAudioSource.Play();

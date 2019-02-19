@@ -7,6 +7,7 @@ using UnityEngine.UI;
 
 public class newStorageBoss : MonoBehaviour
 {
+    #region Variables
 
     public int bossPhase = 0;
 
@@ -69,6 +70,7 @@ public class newStorageBoss : MonoBehaviour
     private Transform tempTransform;
 
     public GameObject laser;
+#endregion
 
     // Use this for initialization
     void Start ()
@@ -78,7 +80,41 @@ public class newStorageBoss : MonoBehaviour
 	
 	// Update is called once per frame
 	void Update () {
-	    if (bossPhase==1)
+
+        /*
+            ---------------------------------------INDEX OF BOSS FIGHT STAGES-----------------------------------------------
+            1- //flash the boss warning circle
+            2- //move boss into room and start fire
+            3- //spin boss head until looking at player
+            4- //first turret warnings
+            5- //move turrets for first battle phase into room, and turn them on
+            6- //turn on turret forcefields
+            7- //open boss weak spot and spin base to face player
+            8- //first battle phase
+            9- //rotate base to face away from player
+            10-//second battle phase
+            11-//rotate boss head until it faces turret
+            12-//shoot laser at turret 1
+            13-//wait for laser to shoot
+            14-//rotate head to face other turret
+            15-//shoot laser at turret 2
+            16-//wait for laser to shoot
+            17-//warnings for mirrors
+            18-//bring up mirrors
+            19-//turn on boss forcefield
+            20-//rotate head to face player
+            21-//turn on boss targetting lines and wait a sec
+            22-//battle phase 3
+            23-
+            24-
+            25-
+            26-
+            27-
+            --------------------------------------------------------------------------------------------------------------
+
+        */
+        //flash the boss warning circle
+        if (bossPhase==1)
 	    {
 	        timer1 += Time.deltaTime;
 	        if (timer1>1f&&timer1<2f)
@@ -104,6 +140,8 @@ public class newStorageBoss : MonoBehaviour
 	            
             }
 	    }
+
+        //move boss into room and start fire
 	    else if (bossPhase == 2)
 	    {
             
@@ -125,6 +163,8 @@ public class newStorageBoss : MonoBehaviour
 
 	        }
         }
+
+        //spin boss head until looking at player
 	    else if (bossPhase == 3)
 	    {
 	        bossHeadSection.transform.Rotate(0, 180f * Time.deltaTime, 0);
@@ -136,7 +176,10 @@ public class newStorageBoss : MonoBehaviour
 	            headLookingAtPlayer = true;
                 bossPhase = 4;
 	        }
-        }else if (bossPhase==4)
+        }
+
+        //first turret warnings
+	    else if (bossPhase==4)
 	    {
 	        alpha += (Time.deltaTime / 1.5f);
 	        foreach (GameObject text in firstBattlePhaseWarnings)
@@ -150,6 +193,8 @@ public class newStorageBoss : MonoBehaviour
 	            bossPhase = 5;
 	        }
         }
+
+        //move turrets for first battle phase into room, and turn them on
 	    else if (bossPhase == 5)
 	    {
 	        firstBattlePhaseObjects.transform.Translate(0, 3f * Time.deltaTime, 0);
@@ -170,6 +215,8 @@ public class newStorageBoss : MonoBehaviour
 	            bossPhase = 6;
 	        }
         }
+
+        //turn on turret forcefields
         else if (bossPhase == 6)
 	    {
 	        timer1 += Time.deltaTime;
@@ -188,6 +235,8 @@ public class newStorageBoss : MonoBehaviour
 	            bossPhase = 7;
 	        }
         }
+
+        //open boss weak spot and spin base to face player 
         else if (bossPhase==7)
 	    {
 
@@ -215,6 +264,8 @@ public class newStorageBoss : MonoBehaviour
             }
 
 	    }
+
+        //first battle phase
         else if (bossPhase==8)
 	    {
 	        baseLookingAt = "Player";
@@ -238,7 +289,10 @@ public class newStorageBoss : MonoBehaviour
 	            bossRayBase.GetComponent<bossRayShooter>().hitBack = false;
 	            bossPhase = 9;
 	        }
-	    }else if (bossPhase==9)
+	    }
+
+        //rotate base to face away from player
+	    else if (bossPhase==9)
 	    {
 	        bossBaseSection.transform.Rotate(0, 180f * Time.deltaTime, 0);
 	        timer1 += Time.deltaTime;
@@ -250,6 +304,8 @@ public class newStorageBoss : MonoBehaviour
 	            bossPhase = 10;
 	        }
         }
+
+        //second battle phase
 	    else if (bossPhase == 10)
 	    {
 	        shootingCooldown += Time.deltaTime;
@@ -276,6 +332,8 @@ public class newStorageBoss : MonoBehaviour
                 bossPhase = 11;
 	        }
         }
+
+        //rotate boss head until it faces turret
 	    else if (bossPhase == 11)
 	    {
 	        bossHeadSection.transform.Rotate(0, 180f * Time.deltaTime, 0);
@@ -290,6 +348,8 @@ public class newStorageBoss : MonoBehaviour
 	            bossPhase = 12;
 	        }
         }
+
+        //shoot laser at turret 1
 	    else if (bossPhase == 12)
 	    {
 	        headTarget = null;
@@ -298,6 +358,8 @@ public class newStorageBoss : MonoBehaviour
 
 	        bossPhase = 13;
 	    }
+
+        //wait for laser to shoot
 	    else if (bossPhase == 13)
 	    {
 	        timer1 += Time.deltaTime;
@@ -309,6 +371,8 @@ public class newStorageBoss : MonoBehaviour
                 bossPhase = 14;
 	        }
 	    }
+        
+        //rotate head to face other turret
 	    else if (bossPhase == 14)
 	    {
 	        bossHeadSection.transform.Rotate(0, 180f * Time.deltaTime, 0);
@@ -321,7 +385,10 @@ public class newStorageBoss : MonoBehaviour
 
 	            bossPhase = 15;
 	        }
-        }else if(bossPhase==15)
+        }
+
+	    //shoot laser at turret 2
+        else if (bossPhase==15)
 
 	    {
 	        headTarget = null;
@@ -331,6 +398,8 @@ public class newStorageBoss : MonoBehaviour
 	        alpha = 0;
 	        bossPhase = 16;
         }
+
+        //wait for laser to shoot
 	    else if (bossPhase == 16)
 
 	    {
@@ -342,6 +411,8 @@ public class newStorageBoss : MonoBehaviour
                 bossPhase = 17;
             }
         }
+
+        //warnings for mirrors
         else if (bossPhase == 17)
 
 	    {
@@ -358,6 +429,8 @@ public class newStorageBoss : MonoBehaviour
 	            bossPhase = 18;
 	        }
         }
+
+        //bring up mirrors
 	    else if (bossPhase == 18)
 
 	    {
@@ -372,6 +445,8 @@ public class newStorageBoss : MonoBehaviour
                 bossPhase = 19;
 	        }
         }
+
+        //turn on boss forcefield
 	    else if (bossPhase == 19)
 
 	    {
@@ -388,6 +463,8 @@ public class newStorageBoss : MonoBehaviour
                 bossPhase = 20;
             }
         }
+
+        //rotate head to face player
         else if (bossPhase==20)
 	    {
 	        bossHeadSection.transform.Rotate(0, 180f * Time.deltaTime, 0);
@@ -401,6 +478,8 @@ public class newStorageBoss : MonoBehaviour
 	            bossPhase = 21;
 	        }
         }
+
+        //turn on boss targetting lines and wait a sec
         else if (bossPhase==21)
 	    {
 	        //bulletEmitter.GetComponentInChildren<LineRenderer>().enabled = true;
@@ -412,6 +491,8 @@ public class newStorageBoss : MonoBehaviour
 	            bossPhase = 22;
 	        }
 	    }
+
+        //battle phase 3
 	    else if (bossPhase == 22)
 	    {
 	        timer1 += Time.deltaTime;
@@ -430,11 +511,12 @@ public class newStorageBoss : MonoBehaviour
 	            timer1 = -12f;
 	        }
 	    }
-	    else if (bossPhase == 22)
+
+	    else if (bossPhase == 23)
 	    {
 
 	    }
-	    else if (bossPhase == 23)
+	    else if (bossPhase == 24)
 	    {
 
 	    }

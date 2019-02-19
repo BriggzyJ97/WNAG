@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+//this script controls the enemies in an old design of the storage boss level 
 public class enemyController : MonoBehaviour
 {
 

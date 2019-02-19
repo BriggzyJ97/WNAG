@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class bulletMirrorDetect : MonoBehaviour
+public class bulletMirrorDetect : MonoBehaviour//this script manages bullet collision 
 {
 
-    public bulletController bulletMain;
+    public bulletController bulletMain;//the main bullet controller
 
     void OnCollisionEnter(Collision other)
     {
-        
+        //bullet reflection code
         if (other.gameObject.tag=="Mirror")
         {
             ContactPoint contact = other.contacts[0];
