@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using TMPro;
 using System;
 using UnityEngine.PostProcessing;
+using UnityEngine.Video;
 
 public class GameStateManager : MonoBehaviour { //This script manages the states of the level, as well as pause menus, loading scenes
 
@@ -44,11 +45,13 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
     public GameObject grabPassObject; //object with grabpass shader used for distorting the level when the player dies
     private float grabPassIntensity = 0; // intesity of grab pass effect, which is rapidly changed for distortion effect
 
-    public GameObject noiseObject; //static noise that shows when player dies
-    public noiseSpriteData noiseSprites; //scriptable object that holds different noise sprites to create static
-    private float noiseTimer = 1f; //timer for how long the noise stays on screen at end
-    public GameObject noiseBar; //the black bar on the static noise
-    private float barMoveSpeed = 10f; // movespeed of the static bar
+    //public GameObject noiseObject; //static noise that shows when player dies
+    //public noiseSpriteData noiseSprites; //scriptable object that holds different noise sprites to create static
+    private float noiseTimer = 2f; //timer for how long the noise stays on screen at end
+    //public GameObject noiseBar; //the black bar on the static noise
+    //private float barMoveSpeed = 10f; // movespeed of the static bar
+    public RawImage transition;
+    public VideoPlayer transitionPlayer;
 
     private AudioSource staticNoise;
     public AudioClip staticSound;
@@ -182,67 +185,50 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
             //after 1 sec load next levels, increment how many levels completed on keeper or go back to main menu if theres no more levels
             else
             {
-                
-	            if (noiseObject.activeSelf == false)
-	            {
-	                staticNoise.clip = staticSound;
-	                staticNoise.volume = 0.015f;
-	                staticNoise.Play();
-                    noiseObject.SetActive(true);
-	            }
 
-	            if (noiseObject.GetComponent<Image>().sprite == noiseSprites.noise1)
-	            {
-	                noiseObject.GetComponent<Image>().sprite = noiseSprites.noise2;
-	            }
-	            else if (noiseObject.GetComponent<Image>().sprite == noiseSprites.noise2)
-	            {
-	                noiseObject.GetComponent<Image>().sprite = noiseSprites.noise3;
-	            }
-	            else if (noiseObject.GetComponent<Image>().sprite == noiseSprites.noise3)
-	            {
-	                noiseObject.GetComponent<Image>().sprite = noiseSprites.noise4;
-	            }
-	            else
-	            {
-	                noiseObject.GetComponent<Image>().sprite = noiseSprites.noise1;
-	            }
+                if (transition.gameObject.activeSelf == false)
+                {
+                    transition.gameObject.SetActive(true);
+                    staticNoise.clip = staticSound;
+                    staticNoise.volume = 0.01f;
+                    staticNoise.Play();
+                    transitionPlayer.Play();
+                    
 
-	            noiseBar.GetComponent<RectTransform>().Translate(0, -barMoveSpeed * Time.deltaTime, 0);
-
-	            noiseTimer -= Time.deltaTime;
-                //after 1 sec load next levels, increment how many levels completed on keeper or go back to main menu if theres no more levels
+                }
+                noiseTimer -= Time.deltaTime;
                 if (noiseTimer < 0)
-	            {
-	                if (winText != null)
-	                {
-	                    winText.text = "End of demo \nThanks For Playing! \nPlease Rate! < 3";
-	                }
+                {
+                    if (winText != null)
+                    {
+                        winText.text = "End of demo \nThanks For Playing! \nPlease Rate! < 3";
+                    }
 
-	                if (completionKeeper.howManyLevelsCompleted <= SceneManager.GetActiveScene().buildIndex-1)
-	                {
-	                    completionKeeper.howManyLevelsCompleted += 1;
-	                   
-	                    PlayerPrefs.SetInt("levelsCompleted", completionKeeper.howManyLevelsCompleted);
-	                }else if (SceneManager.GetActiveScene().buildIndex == 1&&completionKeeper.howManyLevelsCompleted==0)
-	                {
-	                   // completionKeeper.howManyLevelsCompleted++;
-	                   // PlayerPrefs.SetInt("levelsCompleted", completionKeeper.howManyLevelsCompleted);
+                    if (completionKeeper.howManyLevelsCompleted <= SceneManager.GetActiveScene().buildIndex - 1)
+                    {
+                        completionKeeper.howManyLevelsCompleted += 1;
+
+                        PlayerPrefs.SetInt("levelsCompleted", completionKeeper.howManyLevelsCompleted);
+                    }
+                    else if (SceneManager.GetActiveScene().buildIndex == 1 && completionKeeper.howManyLevelsCompleted == 0)
+                    {
+                        // completionKeeper.howManyLevelsCompleted++;
+                        // PlayerPrefs.SetInt("levelsCompleted", completionKeeper.howManyLevelsCompleted);
                     }
                     //Debug.Log(SceneManager.GetActiveScene().buildIndex);
-	                if (SceneManager.GetActiveScene().buildIndex==21)
-	                {
-	                    SceneManager.LoadScene("MenuScene");
+                    if (SceneManager.GetActiveScene().buildIndex == 21)
+                    {
+                        SceneManager.LoadScene("MenuScene");
                     }
                     else
-	                if (SceneManager.sceneCountInBuildSettings != SceneManager.GetActiveScene().buildIndex + 1 )
-	                {
-	                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-	                }
-	                else
-	                {
-	                    SceneManager.LoadScene("MenuScene");
-	                }
+                    if (SceneManager.sceneCountInBuildSettings != SceneManager.GetActiveScene().buildIndex + 1)
+                    {
+                        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+                    }
+                    else
+                    {
+                        SceneManager.LoadScene("MenuScene");
+                    }
                 }
                 
                 
@@ -274,39 +260,42 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
             //show the tv static noise and cycle through sprite variations for it to animate and reload scene
             else if (currentLoseState == LoseState.tvNoise) 
 	        {
-	            if (noiseObject.activeSelf == false)
+	            if (transition.gameObject.activeSelf == false)
 	            {
-	                staticNoise.clip = staticSound;
-	                staticNoise.volume = 0.03f;
+                    transition.gameObject.SetActive(true);
+                    staticNoise.clip = staticSound;
+	                staticNoise.volume = 0.01f;
 	                staticNoise.Play();
-                    noiseObject.SetActive(true);
+                    transitionPlayer.Play();
                     
 	            }
 
-	            if (noiseObject.GetComponent<Image>().sprite == noiseSprites.noise1)
-	            {
-	                noiseObject.GetComponent<Image>().sprite = noiseSprites.noise2;
-	            }
-	            else if (noiseObject.GetComponent<Image>().sprite == noiseSprites.noise2)
-	            {
-	                noiseObject.GetComponent<Image>().sprite = noiseSprites.noise3;
-	            }
-	            else if (noiseObject.GetComponent<Image>().sprite == noiseSprites.noise3)
-	            {
-	                noiseObject.GetComponent<Image>().sprite = noiseSprites.noise4;
-	            }
-	            else
-	            {
-	                noiseObject.GetComponent<Image>().sprite = noiseSprites.noise1;
-	            }
+                
 
-	            noiseBar.GetComponent<RectTransform>().Translate(0, -barMoveSpeed * Time.deltaTime, 0);
+                //if (noiseObject.GetComponent<Image>().sprite == noiseSprites.noise1)
+                //{
+                //    noiseObject.GetComponent<Image>().sprite = noiseSprites.noise2;
+                //}
+                //else if (noiseObject.GetComponent<Image>().sprite == noiseSprites.noise2)
+                //{
+                //    noiseObject.GetComponent<Image>().sprite = noiseSprites.noise3;
+                //}
+                //else if (noiseObject.GetComponent<Image>().sprite == noiseSprites.noise3)
+                //{
+                //    noiseObject.GetComponent<Image>().sprite = noiseSprites.noise4;
+                //}
+                //else
+                //{
+                //    noiseObject.GetComponent<Image>().sprite = noiseSprites.noise1;
+                //}
 
-	            noiseTimer -= Time.deltaTime;
-	            if (noiseTimer < 0)
-	            {
-	                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);//reload scene
-	            }
+                //noiseBar.GetComponent<RectTransform>().Translate(0, -barMoveSpeed * Time.deltaTime, 0);
+
+                noiseTimer -= Time.deltaTime;
+                if (noiseTimer < 0)
+                {
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);//reload scene
+                }
             }
 	        
         }
@@ -320,38 +309,19 @@ public class GameStateManager : MonoBehaviour { //This script manages the states
         //if the player is loading to the main menu, do the static transition and then load main menu
 	    if (loadingToMainMenu==true)
 	    {
-            //static animation
-	        if (noiseObject.activeSelf == false)
-	        {
-	            staticNoise.clip = staticSound;
-	            staticNoise.volume = 0.015f;
-	            staticNoise.Play();
-                noiseObject.SetActive(true);
-	        }
+            if (transition.gameObject.activeSelf == false)
+            {
+                transition.gameObject.SetActive(true);
+                staticNoise.clip = staticSound;
+                staticNoise.volume = 0.01f;
+                staticNoise.Play();
+                transitionPlayer.Play();
 
-	        if (noiseObject.GetComponent<Image>().sprite == noiseSprites.noise1)
-	        {
-	            noiseObject.GetComponent<Image>().sprite = noiseSprites.noise2;
-	        }
-	        else if (noiseObject.GetComponent<Image>().sprite == noiseSprites.noise2)
-	        {
-	            noiseObject.GetComponent<Image>().sprite = noiseSprites.noise3;
-	        }
-	        else if (noiseObject.GetComponent<Image>().sprite == noiseSprites.noise3)
-	        {
-	            noiseObject.GetComponent<Image>().sprite = noiseSprites.noise4;
-	        }
-	        else
-	        {
-	            noiseObject.GetComponent<Image>().sprite = noiseSprites.noise1;
-	        }
-
-	        noiseBar.GetComponent<RectTransform>().Translate(0, -barMoveSpeed * Time.deltaTime, 0);
-
-	        noiseTimer -= Time.deltaTime;
-	        if (noiseTimer < 0)
-	        {
-	            SceneManager.LoadScene("MenuScene");
+            }
+            noiseTimer -= Time.deltaTime;
+            if (noiseTimer < 0)
+            {
+                SceneManager.LoadScene("MenuScene");
             }
 	    }
 
