@@ -48,7 +48,7 @@ public class linePulser : MonoBehaviour //this script manages the line renderer 
     private float lineTimer = 0f;
     public StateOfLine currentLineState = StateOfLine.growing;
 
-    private LineRenderer lineRenderer;//the line itself
+    public LineRenderer lineRenderer;//the line itself
     public AnimationCurve widthCurve1;//the width curve of line
     public float widthMultiplier =1;//used to change width of laser while still keeping curve
 

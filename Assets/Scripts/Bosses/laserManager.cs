@@ -15,6 +15,7 @@ public class laserManager : MonoBehaviour// this script manages the laser animat
 
     public GameObject cameraMain;
     public bool isLaserDying = false;
+    public GameObject reflectedLaser;
 #endregion
     // Use this for initialization
     void Start () {
@@ -58,7 +59,7 @@ public class laserManager : MonoBehaviour// this script manages the laser animat
 	        }
 
             //shrink laser and fireball then start it dying
-	        if (timer1 > 11f)
+            if (timer1 > 11f && reflectedLaser == null)
 	        {
 	            laserColider.GetComponent<CapsuleCollider>().radius -= (0.06f * Time.deltaTime);
                 laserLine.GetComponent<linePulser>().widthMultiplier -= 0.7f * Time.deltaTime;

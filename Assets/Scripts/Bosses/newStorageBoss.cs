@@ -472,7 +472,7 @@ public class newStorageBoss : MonoBehaviour
 	        {
 	            bossRayHead.SetActive(false);
 	            alpha = 0;
-	            timer2 = 0;
+	            timer2 = -0f;
 	            headTarget = Player;
 	            headLookingAtPlayer = true;
 	            bossPhase = 21;
@@ -482,9 +482,9 @@ public class newStorageBoss : MonoBehaviour
         //turn on boss targetting lines and wait a sec
         else if (bossPhase==21)
 	    {
-	        //bulletEmitter.GetComponentInChildren<LineRenderer>().enabled = true;
-	        bulletEmitterL.GetComponentInChildren<LineRenderer>().enabled = true;
-	        bulletEmitterR.GetComponentInChildren<LineRenderer>().enabled = true;
+	        bulletEmitter.GetComponentInChildren<LineRenderer>().enabled = true;
+	        bulletEmitterL.GetComponentInChildren<LineRenderer>().enabled = false;
+	        bulletEmitterR.GetComponentInChildren<LineRenderer>().enabled = false;
 	        timer1 += Time.deltaTime;
 	        if (timer1>1)
 	        {
@@ -499,8 +499,8 @@ public class newStorageBoss : MonoBehaviour
             timer2 += Time.deltaTime;
 	        if (timer2>0.5f)
 	        {
-	            Instantiate(bulletPrefab, bulletEmitterL.transform.position, bulletEmitterL.transform.rotation);
-	            Instantiate(bulletPrefab, bulletEmitterR.transform.position, bulletEmitterR.transform.rotation);
+	            Instantiate(bulletPrefab, bulletEmitter.transform.position, bulletEmitter.transform.rotation);
+	            //Instantiate(bulletPrefab, bulletEmitterR.transform.position, bulletEmitterR.transform.rotation);
                 timer2 = 0;
 	        }
 
@@ -508,8 +508,13 @@ public class newStorageBoss : MonoBehaviour
 	        {
 	            Instantiate(laser, laserEmitter.transform.position, laserEmitter
 	                .transform.rotation);
-	            timer1 = -12f;
+                headLookingAtPlayer = false;
+                timer1 = -12f;
 	        }
+            if (timer1>0&&headLookingAtPlayer==false)
+            {
+                headLookingAtPlayer = true;
+            }
 	    }
 
 	    else if (bossPhase == 23)

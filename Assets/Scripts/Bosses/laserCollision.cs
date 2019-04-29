@@ -9,6 +9,7 @@ public class laserCollision : MonoBehaviour //this script is the collision scrip
     private Color FFColor;
     public GameObject line;
     private GameObject basicTarget;
+    public GameObject reflectedLaserPrefab;
 
 	// Use this for initialization
 	void Start ()
@@ -16,10 +17,10 @@ public class laserCollision : MonoBehaviour //this script is the collision scrip
 	    basicTarget = line.GetComponent<linePulser>().targetGameObject;
 	}
 
-    void OnTriggerEnter(Collider other)
+    void OnCollisionEnter(Collision other)
     {
         //kill players if they touch it
-        if (other.tag=="Player")
+        if (other.gameObject.CompareTag("Player"))
         {
             if (other.gameObject.GetComponent<playerController>() != null)
             {
@@ -33,12 +34,33 @@ public class laserCollision : MonoBehaviour //this script is the collision scrip
                 GameStateManager.GameState.levelLose;
             //Destroy(this.gameObject);
         }
+
+        if (reflectedLaserPrefab != null)
+        {
+            if (other.gameObject.CompareTag("Mirror"))
+            {
+                ContactPoint contact = other.contacts[0];
+                
+                //Debug.Log("Before: "+bulletMain.directionOfBullet);
+                linePulser linePulser = line.GetComponent<linePulser>();
+                linePulser.targetGameObject.transform.position = contact.point;
+                Vector3 directionOfLaser = (gameObject.transform.position - contact.point).normalized;
+                Vector3 newDirectionOfLaser = Vector3.Reflect(directionOfLaser, Vector3.forward).normalized;
+
+                Quaternion lookRotation = Quaternion.LookRotation(newDirectionOfLaser);
+                GameObject newStartedLaser = Instantiate(reflectedLaserPrefab, contact.point, lookRotation);
+                laserManager mainLaser = gameObject.transform.parent.parent.gameObject.GetComponent<laserManager>();
+                mainLaser.reflectedLaser = newStartedLaser;
+                newStartedLaser.GetComponent<newReflectedLaser>().mainLaser = mainLaser;
+            }
+        }
+        
     }
 
-    void OnTriggerStay(Collider other)
+    void OnCollisionStay(Collision other)
     {
         //change the colour of forcefields when they hit it
-         if (other.tag == "ForceField")
+         if (other.gameObject.CompareTag("ForceField"))
          {
              line.GetComponent<linePulser>().targetGameObject.transform.position = other.transform.position;
             FFColor = other.gameObject.GetComponent<forcefieldController>().forceSegL.GetComponent<Renderer>().material.GetColor("_MainColor");
@@ -50,14 +72,15 @@ public class laserCollision : MonoBehaviour //this script is the collision scrip
         }
 
         //destroy turrets after a short duration
-        if (other.tag=="Turret")
+        if (other.gameObject.CompareTag("Turret"))
         {
             TurretDeathTimer += Time.deltaTime;
             if (TurretDeathTimer>3f)
             {
-                //Debug.Log("Destroy turret");
                 other.gameObject.GetComponent<turretDestruction>().DestroyTurret();
             }
         }
+
+        
     }
 }
